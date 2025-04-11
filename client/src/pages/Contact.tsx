@@ -16,6 +16,26 @@ const Contact = () => {
     document.title = 'Contact Us - StudyVista';
     window.scrollTo(0, 0);
   }, []);
+  
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    // Handle resize for responsive design
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    // Initial check
+    handleResize();
+    
+    // Add event listener
+    window.addEventListener('resize', handleResize);
+    
+    // Cleanup event listener
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
@@ -439,7 +459,7 @@ const sectionTitleStyle: React.CSSProperties = {
 
 const contactContentStyle: React.CSSProperties = {
   display: 'grid',
-  gridTemplateColumns: '1fr 1fr',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))',
   gap: 'var(--spacing-xl)',
   maxWidth: '1200px',
   margin: '0 auto',
@@ -447,7 +467,7 @@ const contactContentStyle: React.CSSProperties = {
 
 const contactInfoCardsStyle: React.CSSProperties = {
   display: 'grid',
-  gridTemplateColumns: 'repeat(2, 1fr)',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
   gap: 'var(--spacing-md)',
 };
 
@@ -598,7 +618,7 @@ const globalOfficesStyle: React.CSSProperties = {
 
 const officesGridStyle: React.CSSProperties = {
   display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
+  gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
   gap: 'var(--spacing-lg)',
   maxWidth: '1200px',
   margin: '0 auto',
