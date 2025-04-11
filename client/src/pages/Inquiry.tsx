@@ -24,6 +24,26 @@ const Inquiry = () => {
     document.title = 'Inquiry - StudyVista';
     window.scrollTo(0, 0);
   }, []);
+  
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    // Handle resize for responsive design
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    // Initial check
+    handleResize();
+    
+    // Add event listener
+    window.addEventListener('resize', handleResize);
+    
+    // Cleanup event listener
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const [formData, setFormData] = useState<FormData>({
     firstName: '',
@@ -43,6 +63,22 @@ const Inquiry = () => {
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof FormData, string>>>({});
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  
+  // Responsive styles defined inside the component
+  const formRowStyle: React.CSSProperties = {
+    display: 'grid',
+    gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
+    gap: 'var(--spacing-md)',
+    marginBottom: 'var(--spacing-md)',
+  };
+  
+  const faqGridStyle: React.CSSProperties = {
+    display: 'grid',
+    gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill, minmax(450px, 1fr))',
+    gap: 'var(--spacing-lg)',
+    maxWidth: '1200px',
+    margin: '0 auto',
+  };
 
   const validateForm = () => {
     const errors: Partial<Record<keyof FormData, string>> = {};
@@ -652,12 +688,7 @@ const inquiryFormStyle: React.CSSProperties = {
   
 };
 
-const formRowStyle: React.CSSProperties = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(2, 1fr)',
-  gap: 'var(--spacing-md)',
-  marginBottom: 'var(--spacing-md)',
-};
+// We'll define this inside the component to use isMobile state
 
 const formGroupStyle: React.CSSProperties = {
   marginBottom: 'var(--spacing-md)',
@@ -918,13 +949,7 @@ const sectionTitleStyle: React.CSSProperties = {
   marginBottom: 'var(--spacing-xl)',
 };
 
-const faqGridStyle: React.CSSProperties = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fill, minmax(500px, 1fr))',
-  gap: 'var(--spacing-lg)',
-  maxWidth: '1200px',
-  margin: '0 auto',
-};
+// We'll define this inside the component to use isMobile state
 
 const faqItemStyle: React.CSSProperties = {
   backgroundColor: 'white',
