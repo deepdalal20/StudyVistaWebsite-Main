@@ -1,8 +1,8 @@
 :root {
-  --primary: #1e3a8a;
-  --primary-light: #2948a1;
-  --secondary: #f59e0b;
-  --secondary-light: #fbb43c;
+  --primary: #33519f; /* StudyVista logo blue */
+  --primary-light: #4367c7;
+  --secondary: #f7941d; /* StudyVista logo orange */
+  --secondary-light: #fda94d;
   --accent: #3b82f6;
   --light-bg: #f3f4f6;
   --dark-bg: #1f2937;
