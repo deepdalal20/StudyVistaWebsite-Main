@@ -31,7 +31,8 @@ const Blog = () => {
   const [currentPostId, setCurrentPostId] = useState<number | null>(null);
 
   // Get unique categories from blog posts
-  const categories = ['all', ...new Set(blogPosts.map(post => post.category))];
+  const uniqueCategories = Array.from(new Set(blogPosts.map(post => post.category)));
+  const categories = ['all', ...uniqueCategories];
 
   // Filter posts based on active category and search query
   const filteredPosts = blogPosts.filter(post => {
@@ -1404,28 +1405,6 @@ const postImageStyle: React.CSSProperties = {
 
 const postBodyStyle: React.CSSProperties = {
   lineHeight: 1.8,
-  '& h3': {
-    fontSize: '1.4rem',
-    color: 'var(--primary)',
-    marginTop: 'var(--spacing-lg)',
-    marginBottom: 'var(--spacing-md)',
-  },
-  '& h4': {
-    fontSize: '1.2rem',
-    color: 'var(--primary)',
-    marginTop: 'var(--spacing-md)',
-    marginBottom: 'var(--spacing-sm)',
-  },
-  '& p': {
-    marginBottom: 'var(--spacing-md)',
-  },
-  '& ul, & ol': {
-    marginBottom: 'var(--spacing-md)',
-    paddingLeft: 'var(--spacing-lg)',
-  },
-  '& li': {
-    marginBottom: 'var(--spacing-xs)',
-  },
 };
 
 const postTagsStyle: React.CSSProperties = {

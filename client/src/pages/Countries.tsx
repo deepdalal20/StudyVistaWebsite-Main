@@ -375,11 +375,11 @@ const countries: Country[] = [
     image: 'https://images.unsplash.com/photo-1486299267070-83823f5448dd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
     description: 'The United Kingdom offers a rich tradition of academic excellence, with some of the oldest and most prestigious universities in the world. Known for its rigorous and specialized education system, the UK provides internationally recognized qualifications, diverse course options, and a vibrant multicultural environment. Students benefit from shorter program durations, which can be more cost-effective, along with opportunities to work during and after studies.',
     highlights: [
-      'Home to four of the world's top ten universities',
-      'Shorter, more intensive degree programs (typically 3 years for undergraduate)',
-      'Strong research orientation with cutting-edge facilities',
-      'Rich cultural heritage and vibrant student cities',
-      'Graduate Route visa allowing 2-3 years of post-study work'
+      "Home to four of the world's top ten universities",
+      "Shorter, more intensive degree programs (typically 3 years for undergraduate)",
+      "Strong research orientation with cutting-edge facilities",
+      "Rich cultural heritage and vibrant student cities",
+      "Graduate Route visa allowing 2-3 years of post-study work"
     ],
     universities: [
       {
@@ -423,7 +423,7 @@ const countries: Country[] = [
     image: 'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
     description: 'Australia offers a world-class education system combined with an excellent quality of life. Known for its innovative approach to learning, Australian universities emphasize practical skills and research capabilities. The country provides a safe, welcoming environment with diverse landscapes, vibrant cities, and a multicultural society. Students benefit from strong industry connections, extensive support services, and post-study work opportunities.',
     highlights: [
-      'Seven of Australia's universities rank in the world's top 100',
+      "Seven of Australia's universities rank in the world's top 100",
       'Strong focus on employability and practical skills',
       'Safe and welcoming environment for international students',
       'High quality of life and stunning natural environments',
@@ -508,7 +508,7 @@ const countries: Country[] = [
     scholarships: [
       'Vanier Canada Graduate Scholarships',
       'Banting Postdoctoral Fellowships',
-      'Canada Graduate Scholarships – Master's Program',
+      "Canada Graduate Scholarships – Master's Program",
       'Provincial Government Scholarships',
       'University-specific scholarships for international students'
     ]
@@ -566,13 +566,13 @@ const countries: Country[] = [
     name: 'Singapore',
     code: 'SG',
     image: 'https://images.unsplash.com/photo-1525625293386-3f8f99389edd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1349&q=80',
-    description: 'Singapore is a global education hub in Asia, offering world-class universities and a unique blend of Eastern and Western cultures. The city-state provides a safe, clean environment with excellent infrastructure and a strategic location in the heart of Asia. Singapore's education system emphasizes academic rigor, technological advancement, and industry connections, preparing graduates for the global job market. Students benefit from the multicultural experience and extensive networking opportunities.',
+    description: "Singapore is a global education hub in Asia, offering world-class universities and a unique blend of Eastern and Western cultures. The city-state provides a safe, clean environment with excellent infrastructure and a strategic location in the heart of Asia. Singapore's education system emphasizes academic rigor, technological advancement, and industry connections, preparing graduates for the global job market. Students benefit from the multicultural experience and extensive networking opportunities.",
     highlights: [
-      'Home to two of Asia's top universities',
-      'Strategic location as a gateway to Asia',
-      'Safe, clean environment with excellent infrastructure',
-      'Multicultural society with English as the primary language of instruction',
-      'Strong industry connections and internship opportunities'
+      "Home to two of Asia's top universities",
+      "Strategic location as a gateway to Asia",
+      "Safe, clean environment with excellent infrastructure",
+      "Multicultural society with English as the primary language of instruction",
+      "Strong industry connections and internship opportunities"
     ],
     universities: [
       {
@@ -594,19 +594,19 @@ const countries: Country[] = [
     averageTuition: 'SGD 20,000 - SGD 45,000',
     averageLiving: 'SGD 10,000 - SGD 15,000',
     visaRequirements: [
-      'Acceptance letter from a Singapore educational institution',
-      'Student's Pass application through the Student's Pass Online Application & Registration (SOLAR)',
-      'eForm 16 and passport-sized photograph',
-      'Medical examination report if required',
-      'Proof of financial ability to support studies',
-      'Payment of Student's Pass issuance fee'
+      "Acceptance letter from a Singapore educational institution",
+      "Student's Pass application through the Student's Pass Online Application & Registration (SOLAR)",
+      "eForm 16 and passport-sized photograph",
+      "Medical examination report if required",
+      "Proof of financial ability to support studies",
+      "Payment of Student's Pass issuance fee"
     ],
     scholarships: [
-      'Singapore International Graduate Award (SINGA)',
-      'ASEAN Scholarships',
-      'Science & Technology Undergraduate Scholarship',
-      'Tuition Grant Scheme (subsidized tuition fees with service obligation)',
-      'University-specific scholarships for international students'
+      "Singapore International Graduate Award (SINGA)",
+      "ASEAN Scholarships",
+      "Science & Technology Undergraduate Scholarship",
+      "Tuition Grant Scheme (subsidized tuition fees with service obligation)",
+      "University-specific scholarships for international students"
     ]
   }
 ];
