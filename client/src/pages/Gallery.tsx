@@ -19,6 +19,25 @@ const Gallery = () => {
 
   const [filter, setFilter] = useState<string>('all');
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    // Handle resize for responsive design
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    // Initial check
+    handleResize();
+    
+    // Add event listener
+    window.addEventListener('resize', handleResize);
+    
+    // Cleanup event listener
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const filterImages = (category: string) => {
     setFilter(category);
@@ -312,7 +331,7 @@ const galleryFilterStyle: React.CSSProperties = {
   display: 'flex',
   justifyContent: 'center',
   flexWrap: 'wrap',
-  gap: 'var(--spacing-xs)',
+  gap: 'var(--spacing-xs) var(--spacing-sm)',
   marginBottom: 'var(--spacing-xl)',
 };
 
@@ -329,7 +348,7 @@ const filterButtonStyle: React.CSSProperties = {
 
 const galleryGridStyle: React.CSSProperties = {
   display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+  gridTemplateColumns: 'repeat(auto-fill, minmax(270px, 1fr))',
   gap: 'var(--spacing-md)',
 };
 
@@ -427,7 +446,7 @@ const closeButtonStyle: React.CSSProperties = {
 
 const lightboxImageStyle: React.CSSProperties = {
   maxWidth: '100%',
-  maxHeight: '80vh',
+  maxHeight: '75vh',
   borderRadius: 'var(--border-radius-md)',
   boxShadow: 'var(--shadow-lg)',
 };

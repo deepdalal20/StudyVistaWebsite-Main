@@ -27,6 +27,25 @@ const Countries = () => {
 
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
   const [activeTab, setActiveTab] = useState<string>('overview');
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    // Handle resize for responsive design
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    // Initial check
+    handleResize();
+    
+    // Add event listener
+    window.addEventListener('resize', handleResize);
+    
+    // Cleanup event listener
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const openCountryDetails = (country: Country) => {
     setSelectedCountry(country);
@@ -631,7 +650,7 @@ const sectionTitleStyle: React.CSSProperties = {
 
 const countriesGridStyle: React.CSSProperties = {
   display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+  gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
   gap: 'var(--spacing-lg)',
 };
 
@@ -837,9 +856,10 @@ const universityButtonStyle: React.CSSProperties = {
   transition: 'all var(--transition-fast)',
 };
 
+// Update the visa requirements style to be more responsive using CSS Grid
 const visaRequirementsStyle: React.CSSProperties = {
   display: 'grid',
-  gridTemplateColumns: '1fr 1fr',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
   gap: 'var(--spacing-lg)',
 };
 

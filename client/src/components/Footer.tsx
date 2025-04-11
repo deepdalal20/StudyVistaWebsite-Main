@@ -1,6 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'wouter';
 
 const Footer: React.FC = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    // Handle resize for responsive design
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    // Initial check
+    handleResize();
+    
+    // Add event listener
+    window.addEventListener('resize', handleResize);
+    
+    // Cleanup event listener
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   return (
     <footer className="footer" style={footerStyle}>
       <div className="container">
@@ -37,22 +57,22 @@ const Footer: React.FC = () => {
             <h3 className="footer-title" style={footerTitleStyle}>Quick Links</h3>
             <ul className="footer-links" style={footerLinksStyle}>
               <li className="footer-link" style={footerLinkItemStyle}>
-                <a href="#" style={footerLinkStyle}><i className="fas fa-chevron-right" style={footerLinkIconStyle}></i> Home</a>
+                <Link href="/" style={footerLinkStyle}><i className="fas fa-chevron-right" style={footerLinkIconStyle}></i> Home</Link>
               </li>
               <li className="footer-link" style={footerLinkItemStyle}>
-                <a href="#destinations" style={footerLinkStyle}><i className="fas fa-chevron-right" style={footerLinkIconStyle}></i> Countries</a>
+                <Link href="/countries" style={footerLinkStyle}><i className="fas fa-chevron-right" style={footerLinkIconStyle}></i> Countries</Link>
               </li>
               <li className="footer-link" style={footerLinkItemStyle}>
-                <a href="#" style={footerLinkStyle}><i className="fas fa-chevron-right" style={footerLinkIconStyle}></i> About Us</a>
+                <Link href="/about" style={footerLinkStyle}><i className="fas fa-chevron-right" style={footerLinkIconStyle}></i> About Us</Link>
               </li>
               <li className="footer-link" style={footerLinkItemStyle}>
-                <a href="#" style={footerLinkStyle}><i className="fas fa-chevron-right" style={footerLinkIconStyle}></i> Gallery</a>
+                <Link href="/gallery" style={footerLinkStyle}><i className="fas fa-chevron-right" style={footerLinkIconStyle}></i> Gallery</Link>
               </li>
               <li className="footer-link" style={footerLinkItemStyle}>
-                <a href="#" style={footerLinkStyle}><i className="fas fa-chevron-right" style={footerLinkIconStyle}></i> Blogs</a>
+                <Link href="/blog" style={footerLinkStyle}><i className="fas fa-chevron-right" style={footerLinkIconStyle}></i> Blogs</Link>
               </li>
               <li className="footer-link" style={footerLinkItemStyle}>
-                <a href="#inquiry-form" style={footerLinkStyle}><i className="fas fa-chevron-right" style={footerLinkIconStyle}></i> Contact Now</a>
+                <Link href="/contact" style={footerLinkStyle}><i className="fas fa-chevron-right" style={footerLinkIconStyle}></i> Contact Now</Link>
               </li>
             </ul>
           </div>
@@ -61,22 +81,22 @@ const Footer: React.FC = () => {
             <h3 className="footer-title" style={footerTitleStyle}>Countries</h3>
             <ul className="footer-links" style={footerLinksStyle}>
               <li className="footer-link" style={footerLinkItemStyle}>
-                <a href="#" style={footerLinkStyle}><i className="fas fa-chevron-right" style={footerLinkIconStyle}></i> USA</a>
+                <Link href="/countries" style={footerLinkStyle}><i className="fas fa-chevron-right" style={footerLinkIconStyle}></i> USA</Link>
               </li>
               <li className="footer-link" style={footerLinkItemStyle}>
-                <a href="#" style={footerLinkStyle}><i className="fas fa-chevron-right" style={footerLinkIconStyle}></i> UK</a>
+                <Link href="/countries" style={footerLinkStyle}><i className="fas fa-chevron-right" style={footerLinkIconStyle}></i> UK</Link>
               </li>
               <li className="footer-link" style={footerLinkItemStyle}>
-                <a href="#" style={footerLinkStyle}><i className="fas fa-chevron-right" style={footerLinkIconStyle}></i> Australia</a>
+                <Link href="/countries" style={footerLinkStyle}><i className="fas fa-chevron-right" style={footerLinkIconStyle}></i> Australia</Link>
               </li>
               <li className="footer-link" style={footerLinkItemStyle}>
-                <a href="#" style={footerLinkStyle}><i className="fas fa-chevron-right" style={footerLinkIconStyle}></i> Canada</a>
+                <Link href="/countries" style={footerLinkStyle}><i className="fas fa-chevron-right" style={footerLinkIconStyle}></i> Canada</Link>
               </li>
               <li className="footer-link" style={footerLinkItemStyle}>
-                <a href="#" style={footerLinkStyle}><i className="fas fa-chevron-right" style={footerLinkIconStyle}></i> Singapore</a>
+                <Link href="/countries" style={footerLinkStyle}><i className="fas fa-chevron-right" style={footerLinkIconStyle}></i> Singapore</Link>
               </li>
               <li className="footer-link" style={footerLinkItemStyle}>
-                <a href="#" style={footerLinkStyle}><i className="fas fa-chevron-right" style={footerLinkIconStyle}></i> New Zealand</a>
+                <Link href="/countries" style={footerLinkStyle}><i className="fas fa-chevron-right" style={footerLinkIconStyle}></i> New Zealand</Link>
               </li>
             </ul>
           </div>
@@ -117,12 +137,9 @@ const footerStyle: React.CSSProperties = {
 
 const footerGridStyle: React.CSSProperties = {
   display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
   gap: 'var(--spacing-xl)',
   marginBottom: 'var(--spacing-xl)',
-  '@media (max-width: 480px)': {
-    gridTemplateColumns: '1fr',
-  },
 };
 
 const footerAboutStyle: React.CSSProperties = {
@@ -149,15 +166,7 @@ const footerTitleStyle: React.CSSProperties = {
   color: 'white',
   position: 'relative',
   paddingBottom: 'var(--spacing-xs)',
-  '::after': {
-    content: '""',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    width: '50px',
-    height: '2px',
-    backgroundColor: 'var(--secondary)',
-  }
+  borderBottom: '2px solid var(--secondary)'
 };
 
 const footerLinksStyle: React.CSSProperties = {
@@ -173,9 +182,7 @@ const footerLinkStyle: React.CSSProperties = {
   transition: 'color var(--transition-fast)',
   display: 'flex',
   alignItems: 'center',
-  '&:hover': {
-    color: 'var(--secondary)',
-  }
+  textDecoration: 'none'
 };
 
 const footerLinkIconStyle: React.CSSProperties = {
@@ -215,10 +222,7 @@ const socialLinkStyle: React.CSSProperties = {
   color: 'white',
   borderRadius: '50%',
   transition: 'all var(--transition-fast)',
-  '&:hover': {
-    backgroundColor: 'var(--secondary)',
-    transform: 'translateY(-5px)',
-  }
+  textDecoration: 'none'
 };
 
 const footerBottomStyle: React.CSSProperties = {

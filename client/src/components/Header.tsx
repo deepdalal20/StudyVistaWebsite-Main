@@ -4,12 +4,14 @@ import { Link } from 'wouter';
 const Header = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
 
   useEffect(() => {
+    // Handle scroll for sticky header
     const handleScroll = () => {
       if (window.scrollY > 50) {
         setScrolled(true);
@@ -17,10 +19,23 @@ const Header = () => {
         setScrolled(false);
       }
     };
-
+    
+    // Handle resize for responsive design
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    // Initial check
+    handleResize();
+    
+    // Add event listeners
     window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize);
+    
+    // Cleanup event listeners
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -65,15 +80,12 @@ const Header = () => {
             className="mobile-menu-btn" 
             onClick={toggleMenu}
             style={{
-              display: 'none',
+              display: isMobile ? 'block' : 'none',
               background: 'none',
               border: 'none',
               fontSize: '1.5rem',
               color: 'var(--primary)',
-              cursor: 'pointer',
-              '@media (max-width: 768px)': {
-                display: 'block'
-              }
+              cursor: 'pointer'
             }}
           >
             <i className={`fas ${menuVisible ? 'fa-times' : 'fa-bars'}`}></i>
@@ -81,67 +93,41 @@ const Header = () => {
           <ul 
             className={`main-nav ${menuVisible ? 'active' : ''}`}
             style={{
-              display: 'flex',
+              display: isMobile ? (menuVisible ? 'flex' : 'none') : 'flex',
+              position: isMobile ? 'absolute' : 'static',
+              top: isMobile ? '100%' : 'auto',
+              left: isMobile ? 0 : 'auto',
+              right: isMobile ? 0 : 'auto',
+              backgroundColor: isMobile ? 'white' : 'transparent',
+              flexDirection: isMobile ? 'column' : 'row',
+              padding: isMobile ? 'var(--spacing-md)' : 0,
+              boxShadow: isMobile ? 'var(--shadow-md)' : 'none',
               gap: 'var(--spacing-md)',
-              '@media (max-width: 768px)': {
-                display: menuVisible ? 'flex' : 'none',
-                position: 'absolute',
-                top: '100%',
-                left: 0,
-                right: 0,
-                backgroundColor: 'white',
-                flexDirection: 'column',
-                padding: 'var(--spacing-md)',
-                boxShadow: 'var(--shadow-md)'
-              }
+              zIndex: 10
             }}
           >
-            <li><a href="#" className="nav-link" style={navLinkStyle}>Home</a></li>
-            <li><a href="#destinations" className="nav-link" style={navLinkStyle}>Countries</a></li>
-            <li><a href="#" className="nav-link" style={navLinkStyle}>About Us</a></li>
-            <li><a href="#" className="nav-link" style={navLinkStyle}>Gallery</a></li>
-            <li><a href="#" className="nav-link" style={navLinkStyle}>Blogs</a></li>
-            <li><a href="#inquiry-form" className="nav-link" style={navLinkStyle}>Inquiry now</a></li>
+            <li><Link href="/" className="nav-link" style={{textDecoration: 'none', color: 'var(--text-dark)'}}>Home</Link></li>
+            <li><Link href="/countries" className="nav-link" style={{textDecoration: 'none', color: 'var(--text-dark)'}}>Countries</Link></li>
+            <li><Link href="/about" className="nav-link" style={{textDecoration: 'none', color: 'var(--text-dark)'}}>About Us</Link></li>
+            <li><Link href="/gallery" className="nav-link" style={{textDecoration: 'none', color: 'var(--text-dark)'}}>Gallery</Link></li>
+            <li><Link href="/blog" className="nav-link" style={{textDecoration: 'none', color: 'var(--text-dark)'}}>Blogs</Link></li>
+            <li><Link href="/inquiry" className="nav-link" style={{textDecoration: 'none', color: 'var(--text-dark)'}}>Inquiry</Link></li>
             <li>
-              <a href="#inquiry-form" className="nav-cta" style={{
+              <Link href="/contact" className="nav-cta" style={{
                 backgroundColor: 'var(--primary)',
                 color: 'white',
                 padding: 'var(--spacing-xs) var(--spacing-md)',
                 borderRadius: 'var(--border-radius-md)',
                 fontWeight: 500,
                 transition: 'background-color var(--transition-fast)',
-                ':hover': {
-                  backgroundColor: 'var(--primary-light)',
-                  color: 'white'
-                }
-              }}>Contact page</a>
+                textDecoration: 'none'
+              }}>Contact</Link>
             </li>
           </ul>
         </nav>
       </div>
     </header>
   );
-};
-
-// Styles
-const navLinkStyle = {
-  position: 'relative',
-  padding: 'var(--spacing-xs) var(--spacing-sm)',
-  fontWeight: 500,
-  '::after': {
-    content: '""',
-    position: 'absolute',
-    bottom: 0,
-    left: '50%',
-    width: 0,
-    height: '2px',
-    backgroundColor: 'var(--accent)',
-    transition: 'all var(--transition-medium)',
-    transform: 'translateX(-50%)'
-  },
-  ':hover::after': {
-    width: '100%'
-  }
 };
 
 export default Header;
