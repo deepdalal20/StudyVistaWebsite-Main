@@ -4,128 +4,169 @@ import { Link } from 'wouter';
 const Header = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
 
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
 
+  const closeMenu = () => {
+    setMenuVisible(false);
+  };
+
   useEffect(() => {
-    // Handle scroll for sticky header
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setScrolled(window.scrollY > 50);
     };
-    
-    // Handle resize for responsive design
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    
-    // Initial check
-    handleResize();
-    
-    // Add event listeners
+
     window.addEventListener('scroll', handleScroll);
-    window.addEventListener('resize', handleResize);
-    
-    // Cleanup event listeners
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleResize);
-    };
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
-    <header className={`header ${scrolled ? 'scrolled' : ''}`} style={{
-      backgroundColor: '#fff',
-      position: 'sticky',
-      top: 0,
-      zIndex: 100,
-      boxShadow: 'var(--shadow-md)',
-      transition: 'all var(--transition-medium)'
-    }}>
-      <div className="container nav-container" style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: 'var(--spacing-sm) 0'
-      }}>
-        <div className="logo" style={{
-          display: 'flex',
-          alignItems: 'center'
-        }}>
-          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary" style={{
-            color: 'var(--primary)',
-            marginRight: 'var(--spacing-sm)'
-          }}>
-            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-            <line x1="12" y1="22.08" x2="12" y2="12"></line>
-          </svg>
-          <div className="logo-text" style={{
-            fontFamily: 'Montserrat, sans-serif',
-            fontWeight: 700,
-            fontSize: '1.5rem',
-            color: 'var(--primary)'
-          }}>
-            Study<span style={{ color: 'var(--secondary)' }}>Vista</span>
-          </div>
-        </div>
+    <header className={`header ${scrolled ? 'scrolled' : ''}`}>
+      <div className="nav-container">
+      <div className="logo">
+  <Link to="/">
+    <img 
+      src="/mainlogo.png" 
+      alt="StudyVista Logo" 
+      width={80} 
+      height={40} 
+    />
+  </Link>
+</div>
         <nav>
           <button 
             className="mobile-menu-btn" 
             onClick={toggleMenu}
-            style={{
-              display: isMobile ? 'block' : 'none',
-              background: 'none',
-              border: 'none',
-              fontSize: '1.5rem',
-              color: 'var(--primary)',
-              cursor: 'pointer'
-            }}
+            aria-label="Toggle navigation"
           >
             <i className={`fas ${menuVisible ? 'fa-times' : 'fa-bars'}`}></i>
           </button>
-          <ul 
-            className={`main-nav ${menuVisible ? 'active' : ''}`}
-            style={{
-              display: isMobile ? (menuVisible ? 'flex' : 'none') : 'flex',
-              position: isMobile ? 'absolute' : 'static',
-              top: isMobile ? '100%' : 'auto',
-              left: isMobile ? 0 : 'auto',
-              right: isMobile ? 0 : 'auto',
-              backgroundColor: isMobile ? 'white' : 'transparent',
-              flexDirection: isMobile ? 'column' : 'row',
-              padding: isMobile ? 'var(--spacing-md)' : 0,
-              boxShadow: isMobile ? 'var(--shadow-md)' : 'none',
-              gap: 'var(--spacing-md)',
-              zIndex: 10
-            }}
-          >
-            <li><Link href="/" className="nav-link" style={{textDecoration: 'none', color: 'var(--text-dark)'}}>Home</Link></li>
-            <li><Link href="/countries" className="nav-link" style={{textDecoration: 'none', color: 'var(--text-dark)'}}>Countries</Link></li>
-            <li><Link href="/about" className="nav-link" style={{textDecoration: 'none', color: 'var(--text-dark)'}}>About Us</Link></li>
-            <li><Link href="/gallery" className="nav-link" style={{textDecoration: 'none', color: 'var(--text-dark)'}}>Gallery</Link></li>
-            <li><Link href="/blog" className="nav-link" style={{textDecoration: 'none', color: 'var(--text-dark)'}}>Blogs</Link></li>
-            <li><Link href="/inquiry" className="nav-link" style={{textDecoration: 'none', color: 'var(--text-dark)'}}>Inquiry</Link></li>
+          {/* Changed the active class placement here */}
+          <ul className={`main-nav ${menuVisible ? 'active' : ''}`}>
+            <li><Link href="/" onClick={closeMenu}>Home</Link></li>
+            <li><Link href="/countries" onClick={closeMenu}>Countries</Link></li>
+            <li><Link href="/about" onClick={closeMenu}>About Us</Link></li>
+            <li><Link href="/gallery" onClick={closeMenu}>Gallery</Link></li>
+            <li><Link href="/blog" onClick={closeMenu}>Blogs</Link></li>
+            <li><Link href="/inquiry" onClick={closeMenu}>Inquiry</Link></li>
             <li>
-              <Link href="/contact" className="nav-cta" style={{
-                backgroundColor: 'var(--primary)',
-                color: 'white',
-                padding: 'var(--spacing-xs) var(--spacing-md)',
-                borderRadius: 'var(--border-radius-md)',
-                fontWeight: 500,
-                transition: 'background-color var(--transition-fast)',
-                textDecoration: 'none'
-              }}>Contact</Link>
+              <Link href="/contact" className="nav-cta" onClick={closeMenu}>
+                Contact
+              </Link>
             </li>
           </ul>
         </nav>
       </div>
+
+      <style>{`
+        .header {
+          background: #fff;
+          position: sticky;
+          top: 0;
+          z-index: 1000;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+          transition: all 0.3s ease;
+        }
+
+        .scrolled {
+          box-shadow: 0 2px 15px rgba(0,0,0,0.15);
+        }
+
+        .nav-container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 1rem 2rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .logo img {
+          height: 75px;
+          width: auto;
+        }
+
+        .mobile-menu-btn {
+          display: none;
+          background: none;
+          border: none;
+          font-size: 1.5rem;
+          color: var(--primary);
+          cursor: pointer;
+          z-index: 1001;
+        }
+
+        .main-nav {
+          display: flex;
+          gap: 2rem;
+          align-items: center;
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        }
+
+        .main-nav a {
+          color: #333;
+          text-decoration: none;
+          font-weight: 500;
+          transition: color 0.2s ease;
+        }
+
+        .main-nav a:hover {
+          color: var(--primary);
+        }
+
+        .nav-cta {
+          background: var(--primary);
+          color: white !important;
+          padding: 0.5rem 1.5rem;
+          border-radius: 5px;
+          transition: background 0.2s ease;
+        }
+
+        .nav-cta:hover {
+          background: #f08422;
+        }
+
+        @media (max-width: 768px) {
+          .mobile-menu-btn {
+            display: block;
+          }
+
+          .main-nav {
+            position: fixed;
+            top: 70px;
+            right: -100%;
+            flex-direction: column;
+            background: white;
+            width: 100%;
+            max-width: 300px;
+            height: calc(100vh - 70px);
+            padding: 2rem;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            transition: right 0.3s ease;
+            gap: 1.5rem;
+            align-items: flex-start;
+            z-index: 1000; /* Added z-index */
+          }
+
+          .main-nav.active {
+            right: 0;
+          }
+
+          .nav-container {
+            padding: 1rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .main-nav {
+            max-width: 100%;
+          }
+        }
+      `}</style>
     </header>
   );
 };

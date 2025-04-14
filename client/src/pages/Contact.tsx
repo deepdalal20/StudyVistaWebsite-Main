@@ -16,32 +16,25 @@ const Contact = () => {
     document.title = 'Contact Us - StudyVista';
     window.scrollTo(0, 0);
   }, []);
-  
+
   const [isMobile, setIsMobile] = useState(false);
-  
+
   useEffect(() => {
-    // Handle resize for responsive design
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
-    
-    // Initial check
+
     handleResize();
-    
-    // Add event listener
     window.addEventListener('resize', handleResize);
-    
-    // Cleanup event listener
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
+
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
     email: '',
     subject: '',
-    message: ''
+    message: '',
   });
 
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof ContactFormData, string>>>({});
@@ -50,33 +43,23 @@ const Contact = () => {
 
   const validateForm = () => {
     const errors: Partial<Record<keyof ContactFormData, string>> = {};
-    
     if (!formData.name.trim()) errors.name = 'Name is required';
-    
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.email.trim()) {
       errors.email = 'Email is required';
     } else if (!emailRegex.test(formData.email)) {
       errors.email = 'Please enter a valid email address';
     }
-    
     if (!formData.subject.trim()) errors.subject = 'Subject is required';
     if (!formData.message.trim()) errors.message = 'Message is required';
-    
     return errors;
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-    
-    // Clear error for this field if user is typing
+    setFormData((prev) => ({ ...prev, [name]: value }));
     if (formErrors[name as keyof ContactFormData]) {
-      setFormErrors(prev => {
+      setFormErrors((prev) => {
         const newErrors = { ...prev };
         delete newErrors[name as keyof ContactFormData];
         return newErrors;
@@ -86,50 +69,37 @@ const Contact = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
     const errors = validateForm();
-    
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
       return;
     }
-    
     setSubmitting(true);
-    
-    // Simulate API call
     setTimeout(() => {
       console.log('Form submitted:', formData);
       setFormSubmitted(true);
       setSubmitting(false);
-      
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: ''
-      });
+      setFormData({ name: '', email: '', subject: '', message: '' });
     }, 1500);
   };
 
   return (
     <div className="contact-page">
       <Header />
-      <PageHeader 
-        title="Contact Us" 
-        subtitle="Have a question or need assistance? We're here to help." 
+      <PageHeader
+        title="Contact Us"
+        subtitle="Have a question or need assistance? We're here to help."
         backgroundImage="https://images.unsplash.com/photo-1557426272-fc759fdf7a8d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
       />
-      
+
       <section className="contact-section" style={contactSectionStyle}>
         <div className="container">
           <div className="contact-intro" style={contactIntroStyle} data-aos="fade-up">
             <h2 style={sectionTitleStyle}>Get in Touch</h2>
             <p>
-              Whether you have questions about our services, need guidance on study abroad options, or want to schedule a consultation, we're ready to assist you. Reach out through the form below or contact our office directly.
-            </p>
+Lorem ipsum dolor sit amet consectetur, adipisicing elit. Harum doloremque adipisci, autem atque delectus nulla velit ducimus nemo aut illo magni distinctio, voluptatem sequi accusantium molestias sit! Suscipit, eveniet blanditiis.            </p>
           </div>
-          
+
           <div className="contact-content" style={contactContentStyle}>
             <div className="contact-info-cards" style={contactInfoCardsStyle} data-aos="fade-right">
               <div className="info-card" style={infoCardStyle}>
@@ -138,12 +108,12 @@ const Contact = () => {
                 </div>
                 <h3 style={infoTitleStyle}>Visit Us</h3>
                 <p style={infoTextStyle}>
-                  StudyVista Headquarters<br />
-                  123 Education Street, Suite 500<br />
-                  New York, NY 10001
+                 507,<br />
+                  Luxuria Trade hub<br />
+                  Dumas road,surat-395007
                 </p>
               </div>
-              
+
               <div className="info-card" style={infoCardStyle}>
                 <div className="info-icon" style={infoIconStyle}>
                   <i className="fas fa-envelope"></i>
@@ -155,19 +125,19 @@ const Contact = () => {
                   Support: support@studyvista.com
                 </p>
               </div>
-              
+
               <div className="info-card" style={infoCardStyle}>
                 <div className="info-icon" style={infoIconStyle}>
                   <i className="fas fa-phone-alt"></i>
                 </div>
                 <h3 style={infoTitleStyle}>Call Us</h3>
                 <p style={infoTextStyle}>
-                  Main Line: +1 (555) 123-4567<br />
-                  Toll-Free: 1-800-STUDY-ABROAD<br />
-                  Fax: +1 (555) 765-4321
+                  Main Line: +91 12345 06789<br />
+                  Toll-Free:1236507897<br />
+                  Fax: +91 2013654789
                 </p>
               </div>
-              
+
               <div className="info-card" style={infoCardStyle}>
                 <div className="info-icon" style={infoIconStyle}>
                   <i className="fas fa-clock"></i>
@@ -180,26 +150,23 @@ const Contact = () => {
                 </p>
               </div>
             </div>
-            
+
             <div className="contact-form-container" style={contactFormContainerStyle} data-aos="fade-left">
               {formSubmitted ? (
                 <div className="form-success" style={formSuccessStyle}>
                   <div className="success-icon" style={successIconStyle}>
                     <i className="fas fa-check-circle"></i>
                   </div>
-                  <h3 style={{marginBottom: 'var(--spacing-sm)'}}>Thank You!</h3>
+                  <h3 style={{ marginBottom: 'var(--spacing-sm)' }}>Thank You!</h3>
                   <p>Your message has been sent successfully. We'll get back to you shortly.</p>
-                  <button 
-                    style={sendAnotherButtonStyle}
-                    onClick={() => setFormSubmitted(false)}
-                  >
+                  <button style={sendAnotherButtonStyle} onClick={() => setFormSubmitted(false)}>
                     Send Another Message
                   </button>
                 </div>
               ) : (
                 <form className="contact-form" style={contactFormStyle} onSubmit={handleSubmit}>
                   <h3 style={formTitleStyle}>Send Us a Message</h3>
-                  
+
                   <div className="form-group" style={formGroupStyle}>
                     <label htmlFor="name" style={labelStyle}>
                       Your Name <span style={requiredStyle}>*</span>
@@ -210,19 +177,16 @@ const Contact = () => {
                       name="name"
                       style={{
                         ...inputStyle,
-                        borderColor: formErrors.name ? 'var(--error)' : 'var(--gray-300)'
+                        borderColor: formErrors.name ? 'var(--error)' : 'var(--gray-300)',
                       }}
                       value={formData.name}
                       onChange={handleChange}
-                      placeholder="John Doe"
+                      placeholder="Full Name"
+                      aria-required="true"
                     />
-                    {formErrors.name && (
-                      <div className="error-message" style={errorMessageStyle}>
-                        {formErrors.name}
-                      </div>
-                    )}
+                    {formErrors.name && <div style={errorMessageStyle}>{formErrors.name}</div>}
                   </div>
-                  
+
                   <div className="form-group" style={formGroupStyle}>
                     <label htmlFor="email" style={labelStyle}>
                       Your Email <span style={requiredStyle}>*</span>
@@ -233,19 +197,16 @@ const Contact = () => {
                       name="email"
                       style={{
                         ...inputStyle,
-                        borderColor: formErrors.email ? 'var(--error)' : 'var(--gray-300)'
+                        borderColor: formErrors.email ? 'var(--error)' : 'var(--gray-300)',
                       }}
                       value={formData.email}
                       onChange={handleChange}
-                      placeholder="john.doe@example.com"
+                      placeholder="abc@gmail.com"
+                      aria-required="true"
                     />
-                    {formErrors.email && (
-                      <div className="error-message" style={errorMessageStyle}>
-                        {formErrors.email}
-                      </div>
-                    )}
+                    {formErrors.email && <div style={errorMessageStyle}>{formErrors.email}</div>}
                   </div>
-                  
+
                   <div className="form-group" style={formGroupStyle}>
                     <label htmlFor="subject" style={labelStyle}>
                       Subject <span style={requiredStyle}>*</span>
@@ -256,19 +217,16 @@ const Contact = () => {
                       name="subject"
                       style={{
                         ...inputStyle,
-                        borderColor: formErrors.subject ? 'var(--error)' : 'var(--gray-300)'
+                        borderColor: formErrors.subject ? 'var(--error)' : 'var(--gray-300)',
                       }}
                       value={formData.subject}
                       onChange={handleChange}
                       placeholder="How can we help you?"
+                      aria-required="true"
                     />
-                    {formErrors.subject && (
-                      <div className="error-message" style={errorMessageStyle}>
-                        {formErrors.subject}
-                      </div>
-                    )}
+                    {formErrors.subject && <div style={errorMessageStyle}>{formErrors.subject}</div>}
                   </div>
-                  
+
                   <div className="form-group" style={formGroupStyle}>
                     <label htmlFor="message" style={labelStyle}>
                       Message <span style={requiredStyle}>*</span>
@@ -276,27 +234,20 @@ const Contact = () => {
                     <textarea
                       id="message"
                       name="message"
-                      rows={5}
+                      rows={isMobile ? 4 : 5}
                       style={{
                         ...textareaStyle,
-                        borderColor: formErrors.message ? 'var(--error)' : 'var(--gray-300)'
+                        borderColor: formErrors.message ? 'var(--error)' : 'var(--gray-300)',
                       }}
                       value={formData.message}
                       onChange={handleChange}
                       placeholder="Write your message here..."
-                    ></textarea>
-                    {formErrors.message && (
-                      <div className="error-message" style={errorMessageStyle}>
-                        {formErrors.message}
-                      </div>
-                    )}
+                      aria-required="true"
+                    />
+                    {formErrors.message && <div style={errorMessageStyle}>{formErrors.message}</div>}
                   </div>
-                  
-                  <button 
-                    type="submit" 
-                    style={submitButtonStyle}
-                    disabled={submitting}
-                  >
+
+                  <button type="submit" style={submitButtonStyle} disabled={submitting}>
                     {submitting ? (
                       <>
                         <span className="spinner" style={spinnerStyle}></span>
@@ -312,19 +263,21 @@ const Contact = () => {
           </div>
         </div>
       </section>
-      
+
       <section className="map-section" style={mapSectionStyle} data-aos="fade-up">
         <div className="container">
-          <h2 style={{...sectionTitleStyle, textAlign: 'center', marginBottom: 'var(--spacing-lg)'}}>Find Us</h2>
+          <h2 style={{ ...sectionTitleStyle, textAlign: 'center', marginBottom: 'var(--spacing-lg)' }}>
+            Find Us
+          </h2>
           <div className="map-container" style={mapContainerStyle}>
             <div style={mapStyle}>
-              <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.2157256098687!2d-73.98784742384198!3d40.747951971488!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1680052196368!5m2!1sen!2sus" 
-                width="100%" 
-                height="100%" 
-                style={{border: 0, borderRadius: 'var(--border-radius-lg)'}} 
-                allowFullScreen 
-                loading="lazy" 
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3721.1075423769857!2d72.75764567584362!3d21.148118083667196!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be04d04e5f97c91%3A0x53b04a198fe1ce2!2sLuxuria%20Trade%20Hub%2C%20Dumas%20road%20surat%20395007!5e0!3m2!1sen!2sin!4v1744375411893!5m2!1sen!2sin"
+                width="100%"
+                height="100%"
+                style={{ border: 0, borderRadius: 'var(--border-radius-lg)' }}
+                allowFullScreen
+                loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
                 title="StudyVista Office Location"
               ></iframe>
@@ -332,27 +285,31 @@ const Contact = () => {
           </div>
         </div>
       </section>
-      
+
       <section className="global-offices" style={globalOfficesStyle}>
         <div className="container">
-          <h2 style={{...sectionTitleStyle, textAlign: 'center'}} data-aos="fade-up">Our Global Offices</h2>
-          <p style={{textAlign: 'center', maxWidth: '800px', margin: '0 auto var(--spacing-xl)'}} data-aos="fade-up">
-            With offices around the world, we're ready to assist you no matter where you are. Visit one of our international locations for in-person guidance.
-          </p>
-          
+          <h2 style={{ ...sectionTitleStyle, textAlign: 'center' }} data-aos="fade-up">
+            Our Office
+          </h2>
+          <p
+            style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto var(--spacing-xl)' }}
+            data-aos="fade-up"
+          >
+Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vero repudiandae dolor similique pariatur commodi quam laborum, repellendus sunt provident maiores hic alias nobis. Facere ipsum consequatur velit, numquam quos cum.          </p>
+
           <div className="offices-grid" style={officesGridStyle}>
             {globalOffices.map((office, index) => (
-              <div 
-                key={index} 
-                className="office-card" 
+              <div
+                key={index}
+                className="office-card"
                 style={officeCardStyle}
                 data-aos="fade-up"
                 data-aos-delay={index * 100}
               >
                 <div className="office-header" style={officeHeaderStyle}>
-                  <img 
-                    src={`https://flagcdn.com/w80/${office.countryCode.toLowerCase()}.png`} 
-                    alt={`${office.country} flag`} 
+                  <img
+                    src={`https://flagcdn.com/w80/${office.countryCode.toLowerCase()}.png`}
+                    alt={`${office.country} flag`}
                     style={officeFlagStyle}
                   />
                   <h3 style={officeNameStyle}>{office.city}, {office.country}</h3>
@@ -367,19 +324,19 @@ const Contact = () => {
           </div>
         </div>
       </section>
-      
+
       <section className="contact-cta" style={contactCtaStyle}>
         <div className="container">
           <div className="cta-content" style={ctaContentStyle} data-aos="fade-up">
             <h2>Ready to Begin Your Study Abroad Journey?</h2>
             <p>Schedule a free consultation with our expert education counselors to explore your options.</p>
             <a href="/inquiry" style={ctaButtonStyle}>
-              Schedule Consultation <i className="fas fa-arrow-right" style={{marginLeft: '8px'}}></i>
+              Schedule Consultation <i className="fas fa-arrow-right" style={{ marginLeft: '8px' }}></i>
             </a>
           </div>
         </div>
       </section>
-      
+
       <Footer />
       <BackToTop />
     </div>
@@ -388,54 +345,15 @@ const Contact = () => {
 
 // Data
 const globalOffices = [
+ 
   {
-    city: 'London',
-    country: 'United Kingdom',
-    countryCode: 'GB',
-    address: '123 Oxford Street, London W1D 2HG',
-    phone: '+44 20 7123 4567',
-    email: 'uk@studyvista.com'
-  },
-  {
-    city: 'Sydney',
-    country: 'Australia',
-    countryCode: 'AU',
-    address: '45 George Street, Sydney NSW 2000',
-    phone: '+61 2 9876 5432',
-    email: 'australia@studyvista.com'
-  },
-  {
-    city: 'Toronto',
-    country: 'Canada',
-    countryCode: 'CA',
-    address: '789 Yonge Street, Toronto ON M4W 2G8',
-    phone: '+1 416 555 7890',
-    email: 'canada@studyvista.com'
-  },
-  {
-    city: 'New Delhi',
+    city: 'Surat',
     country: 'India',
-    countryCode: 'IN',
-    address: '567 Connaught Place, New Delhi 110001',
-    phone: '+91 11 2345 6789',
-    email: 'india@studyvista.com'
-  },
-  {
-    city: 'Singapore',
-    country: 'Singapore',
-    countryCode: 'SG',
-    address: '123 Orchard Road, #05-01, Singapore 238893',
-    phone: '+65 6123 4567',
-    email: 'singapore@studyvista.com'
-  },
-  {
-    city: 'Dubai',
-    country: 'UAE',
-    countryCode: 'AE',
-    address: 'Sheikh Zayed Road, Dubai, UAE',
+    countryCode: 'In',
+    address: 'Surat',
     phone: '+971 4 123 4567',
-    email: 'uae@studyvista.com'
-  }
+    email: 'surat@studyvista.com',
+  },
 ];
 
 // Styles
@@ -503,9 +421,7 @@ const contactFormContainerStyle: React.CSSProperties = {
   padding: 'var(--spacing-lg)',
 };
 
-const contactFormStyle: React.CSSProperties = {
-  
-};
+const contactFormStyle: React.CSSProperties = {};
 
 const formTitleStyle: React.CSSProperties = {
   color: 'var(--primary)',
@@ -617,13 +533,13 @@ const globalOfficesStyle: React.CSSProperties = {
 };
 
 const officesGridStyle: React.CSSProperties = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+  display: 'flex',
+  justifyContent: 'center', // Centers horizontally
+  alignItems: 'center', // Centers vertically within the container
   gap: 'var(--spacing-lg)',
   maxWidth: '1200px',
   margin: '0 auto',
 };
-
 const officeCardStyle: React.CSSProperties = {
   backgroundColor: 'var(--light-bg)',
   borderRadius: 'var(--border-radius-md)',
@@ -692,5 +608,144 @@ const errorMessageStyle: React.CSSProperties = {
 const requiredStyle: React.CSSProperties = {
   color: 'var(--error)',
 };
+
+// CSS Keyframes and Media Queries
+const styles = `
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .office-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+
+  @media (max-width: 768px) {
+    .contact-page {
+      overflow-x: hidden !important;
+    }
+
+    .contact-section,
+    .map-section,
+    .global-offices,
+    .contact-cta {
+      padding: calc(var(--spacing-xl) / 2) 0.5rem;
+    }
+
+    .contact-content {
+      grid-template-columns: 1fr !important;
+    }
+
+    .contact-info-cards {
+      grid-template-columns: 1fr;
+    }
+
+    .info-card {
+      padding: calc(var(--spacing-md) / 1.5);
+    }
+
+    .contact-form-container {
+      padding: calc(var(--spacing-lg) / 1.5);
+    }
+
+    .section-title {
+      font-size: calc(1rem * 1.5);
+    }
+
+    .form-title {
+      font-size: calc(1rem * 1.25);
+    }
+
+    .info-icon {
+      font-size: 1.5rem;
+    }
+
+    .info-title {
+      font-size: 1rem;
+    }
+
+    .info-text {
+      font-size: 0.85rem;
+    }
+
+    .map-container {
+      max-width: 100%;
+    }
+
+    .map {
+      height: 300px;
+    }
+
+    .offices-grid {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .office-flag {
+      width: 24px;
+    }
+
+    .office-name {
+      font-size: 1rem;
+    }
+
+    .office-details {
+      font-size: 0.85rem;
+    }
+
+    .cta-content h2 {
+      font-size: 1.5rem;
+    }
+
+    .cta-content p {
+      font-size: 0.9rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .section-title {
+      font-size: calc(1rem * 1.25);
+    }
+
+    .form-title {
+      font-size: 1rem;
+    }
+
+    .input,
+    .textarea {
+      font-size: 0.875rem;
+      padding: calc(var(--spacing-sm) / 1.5);
+    }
+
+    .submit-button,
+    .send-another-button,
+    .cta-button {
+      font-size: 0.875rem;
+      padding: calc(var(--spacing-sm) / 1.5) var(--spacing-md);
+    }
+
+    .success-icon {
+      font-size: 3rem;
+    }
+
+    .form-success h3 {
+      font-size: 1.25rem;
+    }
+
+    .form-success p {
+      font-size: 0.9rem;
+    }
+
+    .error-message {
+      font-size: 0.75rem;
+    }
+  }
+`;
+
+const styleSheet = document.createElement('style');
+styleSheet.textContent = styles;
+document.head.appendChild(styleSheet);
 
 export default Contact;

@@ -85,7 +85,7 @@ const InquiryFormSection: React.FC = () => {
         </div>
         <form className="cta-form" style={ctaFormStyle} onSubmit={handleSubmit} data-aos="fade-up">
           <h3 className="form-title" style={formTitleStyle}>
-            Enrich your academic journey with our expert guidance! Discover the world of endless opportunities.
+lorem Ipsum Emet.
           </h3>
           
           {formSubmitted && (

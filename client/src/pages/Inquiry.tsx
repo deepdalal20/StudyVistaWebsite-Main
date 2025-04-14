@@ -24,25 +24,19 @@ const Inquiry = () => {
     document.title = 'Inquiry - StudyVista';
     window.scrollTo(0, 0);
   }, []);
-  
-  const [isMobile, setIsMobile] = useState(false);
-  
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isTablet, setIsTablet] = useState(window.innerWidth <= 1024 && window.innerWidth > 768);
+
   useEffect(() => {
-    // Handle resize for responsive design
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
+      setIsTablet(window.innerWidth <= 1024 && window.innerWidth > 768);
     };
-    
-    // Initial check
+
     handleResize();
-    
-    // Add event listener
     window.addEventListener('resize', handleResize);
-    
-    // Cleanup event listener
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const [formData, setFormData] = useState<FormData>({
@@ -57,64 +51,62 @@ const Inquiry = () => {
     message: '',
     preferredContact: 'email',
     source: '',
-    agreeToTerms: false
+    agreeToTerms: false,
   });
 
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof FormData, string>>>({});
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  
-  // Responsive styles defined inside the component
+
   const formRowStyle: React.CSSProperties = {
     display: 'grid',
-    gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
-    gap: 'var(--spacing-md)',
-    marginBottom: 'var(--spacing-md)',
+    gridTemplateColumns: isMobile ? '1fr' : isTablet ? '1fr 1fr' : 'repeat(2, 1fr)',
+    gap: isMobile ? 'var(--spacing-sm)' : 'var(--spacing-md)',
+    marginBottom: isMobile ? 'var(--spacing-sm)' : 'var(--spacing-md)',
   };
-  
+
   const faqGridStyle: React.CSSProperties = {
     display: 'grid',
-    gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill, minmax(450px, 1fr))',
-    gap: 'var(--spacing-lg)',
-    maxWidth: '1200px',
+    gridTemplateColumns: isMobile
+      ? '1fr'
+      : isTablet
+      ? 'repeat(auto-fill, minmax(300px, 1fr))'
+      : 'repeat(auto-fill, minmax(450px, 1fr))',
+    gap: isMobile ? 'var(--spacing-md)' : 'var(--spacing-lg)',
+    maxWidth: '1400px',
     margin: '0 auto',
+  };
+
+  const containerStyle: React.CSSProperties = {
+    display: 'grid',
+    gridTemplateColumns: isMobile ? '1fr' : isTablet ? '3fr 2fr' : '2fr 1fr',
+    gap: isMobile ? 'var(--spacing-md)' : 'var(--spacing-xl)',
+    maxWidth: '1400px',
+    margin: '0 auto',
+    padding: isMobile ? '0 var(--spacing-xs)' : '0 var(--spacing-sm)',
   };
 
   const validateForm = () => {
     const errors: Partial<Record<keyof FormData, string>> = {};
-    
     if (!formData.firstName.trim()) errors.firstName = 'First name is required';
     if (!formData.lastName.trim()) errors.lastName = 'Last name is required';
-    
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!formData.email.trim()) {
-      errors.email = 'Email is required';
-    } else if (!emailRegex.test(formData.email)) {
-      errors.email = 'Please enter a valid email address';
-    }
-    
-    if (!formData.phone.trim()) {
-      errors.phone = 'Phone number is required';
-    }
-    
+    if (!formData.email.trim()) errors.email = 'Email is required';
+    else if (!emailRegex.test(formData.email)) errors.email = 'Please enter a valid email address';
+    if (!formData.phone.trim()) errors.phone = 'Phone number is required';
     if (!formData.educationLevel) errors.educationLevel = 'Please select your education level';
     if (!formData.interestedCountry) errors.interestedCountry = 'Please select a country';
     if (!formData.interestedProgram) errors.interestedProgram = 'Please select a program';
-    
     if (!formData.agreeToTerms) errors.agreeToTerms = 'You must agree to the terms and conditions';
-    
     return errors;
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
-    
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
+      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
     }));
-    
-    // Clear error for this field if user is typing
     if (formErrors[name as keyof FormData]) {
       setFormErrors(prev => {
         const newErrors = { ...prev };
@@ -126,30 +118,20 @@ const Inquiry = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
     const errors = validateForm();
-    
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
-      
-      // Scroll to the first error
       const firstErrorField = document.querySelector(`[name="${Object.keys(errors)[0]}"]`);
       if (firstErrorField) {
         firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
-      
       return;
     }
-    
     setSubmitting(true);
-    
-    // Simulate API call
     setTimeout(() => {
       console.log('Form submitted:', formData);
       setFormSubmitted(true);
       setSubmitting(false);
-      
-      // Reset form
       setFormData({
         firstName: '',
         lastName: '',
@@ -162,26 +144,24 @@ const Inquiry = () => {
         message: '',
         preferredContact: 'email',
         source: '',
-        agreeToTerms: false
+        agreeToTerms: false,
       });
-      
-      // Scroll to top of form
       window.scrollTo({
         top: document.getElementById('inquiry-form')?.offsetTop || 0,
-        behavior: 'smooth'
+        behavior: 'smooth',
       });
     }, 1500);
   };
 
   return (
-    <div className="inquiry-page">
+    <div className="inquiry-page" >
       <Header />
-      <PageHeader 
-        title="Inquiry Form" 
-        subtitle="Complete this form to receive personalized guidance from our education consultants" 
+      <PageHeader
+        title="Inquiry Form"
+        subtitle="Complete this form to receive personalized guidance from our education consultants"
         backgroundImage="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
       />
-      
+
       <section className="inquiry-form-section" style={inquiryFormSectionStyle}>
         <div className="container" style={containerStyle}>
           <div className="form-container" style={formContainerStyle} id="inquiry-form">
@@ -190,22 +170,25 @@ const Inquiry = () => {
                 <div className="success-icon" style={successIconStyle}>
                   <i className="fas fa-check-circle"></i>
                 </div>
-                <h2 style={{color: 'var(--primary)', marginBottom: 'var(--spacing-md)'}}>Thank You!</h2>
-                <p>Your inquiry has been successfully submitted. One of our education consultants will contact you within 24 hours to discuss your study abroad options.</p>
-                <button 
-                  style={submitAnotherButtonStyle}
-                  onClick={() => setFormSubmitted(false)}
-                >
+                <h2 style={{ color: 'var(--primary)', marginBottom: 'var(--spacing-md)' }}>Thank You!</h2>
+                <p>
+                  Your inquiry has been successfully submitted. One of our education consultants will contact you within
+                  24 hours to discuss your study abroad options.
+                </p>
+                <button style={submitAnotherButtonStyle} onClick={() => setFormSubmitted(false)}>
                   Submit Another Inquiry
                 </button>
               </div>
             ) : (
               <>
                 <div className="form-header" style={formHeaderStyle} data-aos="fade-up">
-                  <h2 style={{color: 'var(--primary)'}}>Start Your International Education Journey</h2>
-                  <p>Fill out the form below and our education consultants will contact you with personalized guidance based on your academic goals and preferences.</p>
+                  <h2 style={{ color: 'var(--primary)' }}>Start Your International Education Journey</h2>
+                  <p>
+                    Fill out the form below and our education consultants will contact you with personalized guidance
+                    based on your academic goals and preferences.
+                  </p>
                 </div>
-                
+
                 <form className="inquiry-form" style={inquiryFormStyle} onSubmit={handleSubmit} data-aos="fade-up" data-aos-delay="100">
                   <div className="form-row" style={formRowStyle}>
                     <div className="form-group" style={formGroupStyle}>
@@ -218,7 +201,7 @@ const Inquiry = () => {
                         name="firstName"
                         style={{
                           ...inputStyle,
-                          borderColor: formErrors.firstName ? 'var(--error)' : 'var(--gray-300)'
+                          borderColor: formErrors.firstName ? 'var(--error)' : 'var(--gray-300)',
                         }}
                         value={formData.firstName}
                         onChange={handleChange}
@@ -229,7 +212,7 @@ const Inquiry = () => {
                         </div>
                       )}
                     </div>
-                    
+
                     <div className="form-group" style={formGroupStyle}>
                       <label htmlFor="lastName" style={labelStyle}>
                         Last Name <span style={requiredStyle}>*</span>
@@ -240,7 +223,7 @@ const Inquiry = () => {
                         name="lastName"
                         style={{
                           ...inputStyle,
-                          borderColor: formErrors.lastName ? 'var(--error)' : 'var(--gray-300)'
+                          borderColor: formErrors.lastName ? 'var(--error)' : 'var(--gray-300)',
                         }}
                         value={formData.lastName}
                         onChange={handleChange}
@@ -252,7 +235,7 @@ const Inquiry = () => {
                       )}
                     </div>
                   </div>
-                  
+
                   <div className="form-row" style={formRowStyle}>
                     <div className="form-group" style={formGroupStyle}>
                       <label htmlFor="email" style={labelStyle}>
@@ -264,7 +247,7 @@ const Inquiry = () => {
                         name="email"
                         style={{
                           ...inputStyle,
-                          borderColor: formErrors.email ? 'var(--error)' : 'var(--gray-300)'
+                          borderColor: formErrors.email ? 'var(--error)' : 'var(--gray-300)',
                         }}
                         value={formData.email}
                         onChange={handleChange}
@@ -275,7 +258,7 @@ const Inquiry = () => {
                         </div>
                       )}
                     </div>
-                    
+
                     <div className="form-group" style={formGroupStyle}>
                       <label htmlFor="phone" style={labelStyle}>
                         Phone Number <span style={requiredStyle}>*</span>
@@ -286,7 +269,7 @@ const Inquiry = () => {
                         name="phone"
                         style={{
                           ...inputStyle,
-                          borderColor: formErrors.phone ? 'var(--error)' : 'var(--gray-300)'
+                          borderColor: formErrors.phone ? 'var(--error)' : 'var(--gray-300)',
                         }}
                         value={formData.phone}
                         onChange={handleChange}
@@ -298,7 +281,7 @@ const Inquiry = () => {
                       )}
                     </div>
                   </div>
-                  
+
                   <div className="form-row" style={formRowStyle}>
                     <div className="form-group" style={formGroupStyle}>
                       <label htmlFor="nationality" style={labelStyle}>
@@ -313,7 +296,7 @@ const Inquiry = () => {
                         onChange={handleChange}
                       />
                     </div>
-                    
+
                     <div className="form-group" style={formGroupStyle}>
                       <label htmlFor="educationLevel" style={labelStyle}>
                         Current Education Level <span style={requiredStyle}>*</span>
@@ -323,7 +306,7 @@ const Inquiry = () => {
                         name="educationLevel"
                         style={{
                           ...selectStyle,
-                          borderColor: formErrors.educationLevel ? 'var(--error)' : 'var(--gray-300)'
+                          borderColor: formErrors.educationLevel ? 'var(--error)' : 'var(--gray-300)',
                         }}
                         value={formData.educationLevel}
                         onChange={handleChange}
@@ -342,7 +325,7 @@ const Inquiry = () => {
                       )}
                     </div>
                   </div>
-                  
+
                   <div className="form-row" style={formRowStyle}>
                     <div className="form-group" style={formGroupStyle}>
                       <label htmlFor="interestedCountry" style={labelStyle}>
@@ -353,7 +336,7 @@ const Inquiry = () => {
                         name="interestedCountry"
                         style={{
                           ...selectStyle,
-                          borderColor: formErrors.interestedCountry ? 'var(--error)' : 'var(--gray-300)'
+                          borderColor: formErrors.interestedCountry ? 'var(--error)' : 'var(--gray-300)',
                         }}
                         value={formData.interestedCountry}
                         onChange={handleChange}
@@ -373,7 +356,7 @@ const Inquiry = () => {
                         </div>
                       )}
                     </div>
-                    
+
                     <div className="form-group" style={formGroupStyle}>
                       <label htmlFor="interestedProgram" style={labelStyle}>
                         Interested Program <span style={requiredStyle}>*</span>
@@ -383,7 +366,7 @@ const Inquiry = () => {
                         name="interestedProgram"
                         style={{
                           ...selectStyle,
-                          borderColor: formErrors.interestedProgram ? 'var(--error)' : 'var(--gray-300)'
+                          borderColor: formErrors.interestedProgram ? 'var(--error)' : 'var(--gray-300)',
                         }}
                         value={formData.interestedProgram}
                         onChange={handleChange}
@@ -404,28 +387,28 @@ const Inquiry = () => {
                       )}
                     </div>
                   </div>
-                  
-                  <div className="form-group" style={{...formGroupStyle, marginBottom: 'var(--spacing-md)'}}>
+
+                  <div className="form-group" style={{ ...formGroupStyle, marginBottom: 'var(--spacing-md)' }}>
                     <label htmlFor="message" style={labelStyle}>
                       Additional Information
                     </label>
                     <textarea
                       id="message"
                       name="message"
-                      rows={4}
+                      rows={isMobile ? 3 : 4}
                       style={textareaStyle}
                       value={formData.message}
                       onChange={handleChange}
                       placeholder="Please provide any specific questions or information that will help us provide better guidance."
                     ></textarea>
                   </div>
-                  
+
                   <div className="form-row" style={formRowStyle}>
                     <div className="form-group" style={formGroupStyle}>
-                      <label style={{...labelStyle, marginBottom: 'var(--spacing-xs)'}}>
+                      <label style={{ ...labelStyle, marginBottom: 'var(--spacing-xs)' }}>
                         Preferred Contact Method
                       </label>
-                      <div style={radioGroupStyle}>
+                      <div style={{ ...radioGroupStyle, flexDirection: isMobile ? 'column' : 'row' }}>
                         <label style={radioLabelStyle}>
                           <input
                             type="radio"
@@ -461,7 +444,7 @@ const Inquiry = () => {
                         </label>
                       </div>
                     </div>
-                    
+
                     <div className="form-group" style={formGroupStyle}>
                       <label htmlFor="source" style={labelStyle}>
                         How did you hear about us?
@@ -482,8 +465,8 @@ const Inquiry = () => {
                       </select>
                     </div>
                   </div>
-                  
-                  <div className="form-group" style={{marginBottom: 'var(--spacing-lg)'}}>
+
+                  <div className="form-group" style={{ marginBottom: 'var(--spacing-lg)' }}>
                     <label style={checkboxLabelStyle}>
                       <input
                         type="checkbox"
@@ -493,7 +476,8 @@ const Inquiry = () => {
                         style={checkboxInputStyle}
                       />
                       <span style={checkboxTextStyle}>
-                        I agree to the <a href="#" style={linkStyle}>Terms & Conditions</a> and <a href="#" style={linkStyle}>Privacy Policy</a>. <span style={requiredStyle}>*</span>
+                        I agree to the <a href="#" style={linkStyle}>Terms & Conditions</a> and{' '}
+                        <a href="#" style={linkStyle}>Privacy Policy</a>. <span style={requiredStyle}>*</span>
                       </span>
                     </label>
                     {formErrors.agreeToTerms && (
@@ -502,12 +486,8 @@ const Inquiry = () => {
                       </div>
                     )}
                   </div>
-                  
-                  <button 
-                    type="submit" 
-                    style={submitButtonStyle}
-                    disabled={submitting}
-                  >
+
+                  <button type="submit" style={submitButtonStyle} disabled={submitting}>
                     {submitting ? (
                       <>
                         <span className="spinner" style={spinnerStyle}></span>
@@ -521,10 +501,10 @@ const Inquiry = () => {
               </>
             )}
           </div>
-          
-          <div className="info-sidebar" style={infoSidebarStyle} data-aos="fade-left">
+
+          <div className="info-sidebar" style={{ ...infoSidebarStyle, order: isMobile ? -1 : 0 }} data-aos="fade-left">
             <div className="contact-info" style={contactInfoStyle}>
-              <h3 style={{color: 'var(--primary)', marginBottom: 'var(--spacing-md)'}}>Contact Information</h3>
+              <h3 style={{ color: 'var(--primary)', marginBottom: 'var(--spacing-md)' }}>Contact Information</h3>
               <ul style={contactListStyle}>
                 <li style={contactItemStyle}>
                   <i className="fas fa-map-marker-alt" style={contactIconStyle}></i>
@@ -556,39 +536,40 @@ const Inquiry = () => {
                 </li>
               </ul>
             </div>
-            
+
             <div className="social-connect" style={socialConnectStyle}>
-              <h3 style={{color: 'var(--primary)', marginBottom: 'var(--spacing-md)'}}>Connect With Us</h3>
-              <div className="social-icons" style={socialIconsStyle}>
-                <a href="#" style={socialIconStyle} aria-label="Facebook">
-                  <i className="fab fa-facebook-f"></i>
-                </a>
-                <a href="#" style={socialIconStyle} aria-label="Instagram">
-                  <i className="fab fa-instagram"></i>
-                </a>
-                <a href="#" style={socialIconStyle} aria-label="Twitter">
-                  <i className="fab fa-twitter"></i>
-                </a>
-                <a href="#" style={socialIconStyle} aria-label="LinkedIn">
-                  <i className="fab fa-linkedin-in"></i>
-                </a>
-                <a href="#" style={socialIconStyle} aria-label="WhatsApp">
-                  <i className="fab fa-whatsapp"></i>
-                </a>
-              </div>
-            </div>
-            
+  <h3 style={{ color: 'var(--primary)', marginBottom: 'var(--spacing-md)' }}>Connect With Us</h3>
+  <div className="social-icons" style={{ ...socialIconsStyle, flexWrap: 'wrap' }}>
+    <a href="#" style={socialIconStyle} className="social-icon" aria-label="Facebook">
+      <i className="fab fa-facebook-f"></i>
+    </a>
+    <a href="#" style={socialIconStyle} className="social-icon" aria-label="Instagram">
+      <i className="fab fa-instagram"></i>
+    </a>
+    <a href="#" style={socialIconStyle} className="social-icon" aria-label="Twitter">
+      <i className="fab fa-twitter"></i>
+    </a>
+    <a href="#" style={socialIconStyle} className="social-icon" aria-label="LinkedIn">
+      <i className="fab fa-linkedin-in"></i>
+    </a>
+    <a href="#" style={socialIconStyle} className="social-icon" aria-label="WhatsApp">
+      <i className="fab fa-whatsapp"></i>
+    </a>
+  </div>
+</div>
+
             <div className="testimonial-sidebar" style={testimonialSidebarStyle}>
               <div className="quote-icon" style={quoteIconStyle}>
                 <i className="fas fa-quote-left"></i>
               </div>
               <p style={testimonialTextStyle}>
-                StudyVista guided me through every step of my application to MIT. Their counselors were incredibly supportive and knowledgeable, making the complex process much easier.
+                StudyVista guided me through every step of my application to MIT. Their counselors were incredibly
+                supportive and knowledgeable, making the complex process much easier.
               </p>
               <div className="testimonial-author" style={testimonialAuthorStyle}>
-                <img 
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80" 
-                  alt="Student Testimonial" 
+                <img
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80"
+                  alt="Student Testimonial"
                   style={testimonialImageStyle}
                 />
                 <div>
@@ -600,17 +581,17 @@ const Inquiry = () => {
           </div>
         </div>
       </section>
-      
+
       <section className="inquiry-faq" style={inquiryFaqStyle}>
         <div className="container">
-          <h2 style={{...sectionTitleStyle, textAlign: 'center'}} data-aos="fade-up">
+          <h2 style={{ ...sectionTitleStyle, textAlign: 'center' }} data-aos="fade-up">
             Frequently Asked Questions
           </h2>
           <div className="faq-grid" style={faqGridStyle}>
             {faqs.map((faq, index) => (
-              <div 
-                key={index} 
-                className="faq-item" 
+              <div
+                key={index}
+                className="faq-item"
                 style={faqItemStyle}
                 data-aos="fade-up"
                 data-aos-delay={index * 100}
@@ -621,8 +602,321 @@ const Inquiry = () => {
             ))}
           </div>
         </div>
+        <style>
+          {
+            `
+            .social-icon:hover {
+  background-color: #f97316 !important; /* Orange */
+  transform: scale(1.1);
+}
+            
+            /* Inquiry.css */
+.inquiry-page {
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden !important;
+}
+
+.inquiry-form-section,
+.inquiry-faq {
+  width: 100%;
+}
+
+/* Mobile devices (up to 768px) */
+@media (max-width: 768px) {
+  .inquiry-form-section .container {
+    grid-template-columns: 1fr;
+    padding: 0 16px;
+  }
+
+  .form-container {
+    padding: 16px;
+  }
+
+  .form-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .form-header p {
+    font-size: 0.9rem;
+  }
+
+  .form-group {
+    margin-bottom: 12px;
+  }
+
+  .form-row {
+    gap: 12px;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 0.85rem;
+    padding: 8px;
+  }
+
+  .submit-button {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+
+  .info-sidebar {
+    gap: 16px;
+  }
+
+  .contact-info,
+  .social-connect,
+  .testimonial-sidebar {
+    padding: 16px;
+  }
+
+  .contact-item {
+    font-size: 0.85rem;
+  }
+
+  .social-icons {
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .social-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 0.9rem;
+  }
+
+  .testimonial-text {
+    font-size: 0.9rem;
+  }
+
+  .testimonial-image {
+    width: 36px;
+    height: 36px;
+  }
+
+  .inquiry-faq h2 {
+    font-size: 1.25rem;
+  }
+
+  .faq-grid {
+    gap: 16px;
+  }
+
+  .faq-item {
+    padding: 16px;
+  }
+
+  .faq-question {
+    font-size: 0.95rem;
+  }
+
+  .faq-answer {
+    font-size: 0.85rem;
+  }
+}
+
+/* Tablet devices (769px to 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .inquiry-form-section .container {
+    grid-template-columns: 3fr 2fr;
+    padding: 0 24px;
+  }
+
+  .form-container {
+    padding: 24px;
+  }
+
+  .form-header h2 {
+    font-size: 1.75rem;
+  }
+
+  .form-header p {
+    font-size: 1rem;
+  }
+
+  .form-group {
+    margin-bottom: 16px;
+  }
+
+  .form-row {
+    gap: 16px;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 0.9rem;
+    padding: 10px;
+  }
+
+  .submit-button {
+    padding: 12px;
+    font-size: 0.95rem;
+  }
+
+  .info-sidebar {
+    gap: 20px;
+  }
+
+  .contact-info,
+  .social-connect,
+  .testimonial-sidebar {
+    padding: 20px;
+  }
+
+  .contact-item {
+    font-size: 0.9rem;
+  }
+
+  .social-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .testimonial-text {
+    font-size: 0.95rem;
+  }
+
+  .inquiry-faq h2 {
+    font-size: 1.5rem;
+  }
+
+  .faq-grid {
+    gap: 20px;
+  }
+
+  .faq-item {
+    padding: 20px;
+  }
+
+  .faq-question {
+    font-size: 1rem;
+  }
+
+  .faq-answer {
+    font-size: 0.9rem;
+  }
+}
+
+/* Desktop and larger screens (1025px and up) */
+@media (min-width: 1025px) {
+  .inquiry-form-section .container {
+    grid-template-columns: 2fr 1fr;
+    padding: 0 32px;
+  }
+
+  .form-container {
+    padding: 32px;
+  }
+
+  .form-header h2 {
+    font-size: 2rem;
+  }
+
+  .form-header p {
+    font-size: 1.1rem;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-row {
+    gap: 20px;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 1rem;
+    padding: 12px;
+  }
+
+  .submit-button {
+    padding: 14px;
+    font-size: 1rem;
+  }
+
+  .info-sidebar {
+    gap: 24px;
+  }
+
+  .contact-info,
+  .social-connect,
+  .testimonial-sidebar {
+    padding: 24px;
+  }
+
+  .contact-item {
+    font-size: 0.95rem;
+  }
+
+  .social-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .testimonial-text {
+    font-size: 1rem;
+  }
+
+  .inquiry-faq h2 {
+    font-size: 1.75rem;
+  }
+
+  .faq-grid {
+    gap: 24px;
+  }
+
+  .faq-item {
+    padding: 24px;
+  }
+
+  .faq-question {
+    font-size: 1.1rem;
+  }
+
+  .faq-answer {
+    font-size: 0.95rem;
+  }
+}
+
+/* Ensure inputs are touch-friendly */
+input,
+select,
+textarea,
+button {
+  min-height: 44px;
+  touch-action: manipulation;
+}
+
+/* Hover effects for non-touch devices */
+@media (hover: hover) {
+  .submit-button:hover:not(:disabled) {
+    background-color: var(--primary-dark);
+  }
+
+  .social-icon:hover {
+    background-color: var(--primary-dark);
+    transform: scale(1.1);
+  }
+
+  .submit-another-button:hover {
+    background-color: var(--primary-dark);
+  }
+}
+
+/* Accessibility adjustments */
+:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+            `
+          }
+        </style>
       </section>
-      
+
       <Footer />
       <BackToTop />
     </div>
@@ -633,49 +927,40 @@ const Inquiry = () => {
 const faqs = [
   {
     question: "How long will it take to get a response after submitting my inquiry?",
-    answer: "Our education consultants typically respond within 24 hours on business days. You'll receive a personalized email or call based on your preferred contact method."
+    answer: "Our education consultants typically respond within 24 hours on business days. You'll receive a personalized email or call based on your preferred contact method.",
   },
   {
     question: "Are there any fees for the initial consultation?",
-    answer: "No, the initial consultation is completely free. We believe in providing accessible guidance to help you make informed decisions about your education."
+    answer: "No, the initial consultation is completely free. We believe in providing accessible guidance to help you make informed decisions about your education.",
   },
   {
     question: "What information should I prepare for the consultation?",
-    answer: "Having your academic transcripts, test scores (if available), and a clear idea of your preferences and goals will help our consultants provide more targeted advice during the consultation."
+    answer: "Having your academic transcripts, test scores (if available), and a clear idea of your preferences and goals will help our consultants provide more targeted advice during the consultation.",
   },
   {
     question: "Can I change my preferred study destination after the initial consultation?",
-    answer: "Absolutely! Our goal is to help you find the best fit for your goals. Your preferences may change as you learn more about different options, and we're here to support you throughout that journey."
+    answer: "Absolutely! Our goal is to help you find the best fit for your goals. Your preferences may change as you learn more about different options, and we're here to support you throughout that journey.",
   },
   {
     question: "Do you provide visa application assistance?",
-    answer: "Yes, our services include comprehensive visa guidance, from document preparation to interview coaching, ensuring you're well-prepared for the visa application process."
+    answer: "Yes, our services include comprehensive visa guidance, from document preparation to interview coaching, ensuring you're well-prepared for the visa application process.",
   },
   {
     question: "I'm not sure what program is right for me. Can you help?",
-    answer: "Yes, our expert counselors can help you explore different academic programs based on your interests, skills, and career goals to find the best match for your aspirations."
-  }
+    answer: "Yes, our expert counselors can help you explore different academic programs based on your interests, skills, and career goals to find the best match for your aspirations.",
+  },
 ];
 
 // Styles
 const inquiryFormSectionStyle: React.CSSProperties = {
-  padding: 'var(--spacing-xl) 0',
+  padding: 'var(--spacing-lg) 0',
   backgroundColor: 'white',
-};
-
-const containerStyle: React.CSSProperties = {
-  display: 'grid',
-  gridTemplateColumns: '2fr 1fr',
-  gap: 'var(--spacing-xl)',
-  maxWidth: '1200px',
-  margin: '0 auto',
-  padding: '0 var(--spacing-sm)',
 };
 
 const formContainerStyle: React.CSSProperties = {
   backgroundColor: 'white',
   borderRadius: 'var(--border-radius-lg)',
-  padding: 'var(--spacing-lg)',
+  padding: 'var(--spacing-md)',
   boxShadow: 'var(--shadow-md)',
 };
 
@@ -684,14 +969,10 @@ const formHeaderStyle: React.CSSProperties = {
   textAlign: 'center',
 };
 
-const inquiryFormStyle: React.CSSProperties = {
-  
-};
-
-// We'll define this inside the component to use isMobile state
+const inquiryFormStyle: React.CSSProperties = {};
 
 const formGroupStyle: React.CSSProperties = {
-  marginBottom: 'var(--spacing-md)',
+  marginBottom: 'var(--spacing-sm)',
 };
 
 const labelStyle: React.CSSProperties = {
@@ -699,46 +980,48 @@ const labelStyle: React.CSSProperties = {
   marginBottom: 'var(--spacing-xs)',
   color: 'var(--text-dark)',
   fontWeight: 500,
+  fontSize: '0.95rem',
 };
 
 const inputStyle: React.CSSProperties = {
   width: '100%',
-  padding: 'var(--spacing-sm)',
+  padding: 'var(--spacing-xs)',
   border: '1px solid #e5e7eb',
   borderRadius: 'var(--border-radius-md)',
-  fontSize: '1rem',
+  fontSize: '0.9rem',
   transition: 'border-color var(--transition-fast)',
 };
 
 const selectStyle: React.CSSProperties = {
   width: '100%',
-  padding: 'var(--spacing-sm)',
+  padding: 'var(--spacing-xs)',
   border: '1px solid #e5e7eb',
   borderRadius: 'var(--border-radius-md)',
-  fontSize: '1rem',
+  fontSize: '0.9rem',
   backgroundColor: 'white',
   transition: 'border-color var(--transition-fast)',
   appearance: 'none',
-  backgroundImage: 'url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23667085\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3e%3cpolyline points=\'6 9 12 15 18 9\'%3e%3c/polyline%3e%3c/svg%3e")',
+  backgroundImage:
+    'url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23667085\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3e%3cpolyline points=\'6 9 12 15 18 9\'%3e%3c/polyline%3e%3c/svg%3e")',
   backgroundRepeat: 'no-repeat',
-  backgroundPosition: 'right 1rem center',
-  backgroundSize: '1rem',
+  backgroundPosition: 'right 0.75rem center',
+  backgroundSize: '0.9rem',
 };
 
 const textareaStyle: React.CSSProperties = {
   width: '100%',
-  padding: 'var(--spacing-sm)',
+  padding: 'var(--spacing-xs)',
   border: '1px solid #e5e7eb',
   borderRadius: 'var(--border-radius-md)',
-  fontSize: '1rem',
+  fontSize: '0.9rem',
   resize: 'vertical',
-  minHeight: '120px',
+  minHeight: '100px',
   transition: 'border-color var(--transition-fast)',
 };
 
 const radioGroupStyle: React.CSSProperties = {
   display: 'flex',
-  gap: 'var(--spacing-md)',
+  gap: 'var(--spacing-sm)',
 };
 
 const radioLabelStyle: React.CSSProperties = {
@@ -749,13 +1032,13 @@ const radioLabelStyle: React.CSSProperties = {
 
 const radioInputStyle: React.CSSProperties = {
   marginRight: 'var(--spacing-xs)',
-  width: '16px',
-  height: '16px',
+  width: '14px',
+  height: '14px',
   accentColor: 'var(--primary)',
 };
 
 const radioTextStyle: React.CSSProperties = {
-  fontSize: '0.95rem',
+  fontSize: '0.9rem',
 };
 
 const checkboxLabelStyle: React.CSSProperties = {
@@ -767,22 +1050,22 @@ const checkboxLabelStyle: React.CSSProperties = {
 const checkboxInputStyle: React.CSSProperties = {
   marginRight: 'var(--spacing-xs)',
   marginTop: '3px',
-  width: '16px',
-  height: '16px',
+  width: '14px',
+  height: '14px',
   accentColor: 'var(--primary)',
 };
 
 const checkboxTextStyle: React.CSSProperties = {
-  fontSize: '0.95rem',
+  fontSize: '0.9rem',
 };
 
 const submitButtonStyle: React.CSSProperties = {
   backgroundColor: 'var(--primary)',
   color: 'white',
-  padding: 'var(--spacing-sm) var(--spacing-xl)',
+  padding: 'var(--spacing-xs) var(--spacing-lg)',
   borderRadius: 'var(--border-radius-md)',
   border: 'none',
-  fontSize: '1rem',
+  fontSize: '0.95rem',
   fontWeight: 600,
   cursor: 'pointer',
   transition: 'background-color var(--transition-fast)',
@@ -794,25 +1077,25 @@ const submitButtonStyle: React.CSSProperties = {
 
 const spinnerStyle: React.CSSProperties = {
   display: 'inline-block',
-  width: '16px',
-  height: '16px',
+  width: '14px',
+  height: '14px',
   border: '2px solid rgba(255,255,255,0.3)',
   borderRadius: '50%',
   borderTopColor: 'white',
   animation: 'spin 1s ease-in-out infinite',
-  marginRight: 'var(--spacing-sm)',
+  marginRight: 'var(--spacing-xs)',
 };
 
 const infoSidebarStyle: React.CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
-  gap: 'var(--spacing-lg)',
+  gap: 'var(--spacing-md)',
 };
 
 const contactInfoStyle: React.CSSProperties = {
   backgroundColor: 'var(--light-bg)',
   borderRadius: 'var(--border-radius-lg)',
-  padding: 'var(--spacing-lg)',
+  padding: 'var(--spacing-md)',
   boxShadow: 'var(--shadow-md)',
 };
 
@@ -825,25 +1108,26 @@ const contactListStyle: React.CSSProperties = {
 const contactItemStyle: React.CSSProperties = {
   display: 'flex',
   alignItems: 'flex-start',
-  marginBottom: 'var(--spacing-md)',
+  marginBottom: 'var(--spacing-sm)',
 };
 
 const contactIconStyle: React.CSSProperties = {
   color: 'var(--primary)',
-  marginRight: 'var(--spacing-sm)',
-  fontSize: '1.2rem',
+  marginRight: 'var(--spacing-xs)',
+  fontSize: '1rem',
   marginTop: '2px',
 };
 
 const contactLabelStyle: React.CSSProperties = {
   fontWeight: 600,
   marginBottom: '2px',
+  fontSize: '0.9rem',
 };
 
 const socialConnectStyle: React.CSSProperties = {
   backgroundColor: 'var(--light-bg)',
   borderRadius: 'var(--border-radius-lg)',
-  padding: 'var(--spacing-lg)',
+  padding: 'var(--spacing-md)',
   boxShadow: 'var(--shadow-md)',
 };
 
@@ -856,12 +1140,12 @@ const socialIconStyle: React.CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  width: '40px',
-  height: '40px',
+  width: '36px',
+  height: '36px',
   backgroundColor: 'var(--primary)',
   color: 'white',
   borderRadius: '50%',
-  fontSize: '1.2rem',
+  fontSize: '1rem',
   transition: 'all var(--transition-fast)',
 };
 
@@ -869,24 +1153,24 @@ const testimonialSidebarStyle: React.CSSProperties = {
   backgroundColor: 'var(--primary)',
   color: 'white',
   borderRadius: 'var(--border-radius-lg)',
-  padding: 'var(--spacing-lg)',
+  padding: 'var(--spacing-md)',
   boxShadow: 'var(--shadow-md)',
   position: 'relative',
 };
 
 const quoteIconStyle: React.CSSProperties = {
   color: 'rgba(255, 255, 255, 0.1)',
-  fontSize: '4rem',
+  fontSize: '3rem',
   position: 'absolute',
-  top: 'var(--spacing-sm)',
-  left: 'var(--spacing-sm)',
+  top: 'var(--spacing-xs)',
+  left: 'var(--spacing-xs)',
 };
 
 const testimonialTextStyle: React.CSSProperties = {
-  fontSize: '1.1rem',
-  lineHeight: 1.6,
+  fontSize: '0.95rem',
+  lineHeight: 1.5,
   fontStyle: 'italic',
-  marginBottom: 'var(--spacing-md)',
+  marginBottom: 'var(--spacing-sm)',
   position: 'relative',
   zIndex: 1,
 };
@@ -897,10 +1181,10 @@ const testimonialAuthorStyle: React.CSSProperties = {
 };
 
 const testimonialImageStyle: React.CSSProperties = {
-  width: '50px',
-  height: '50px',
+  width: '40px',
+  height: '40px',
   borderRadius: '50%',
-  marginRight: 'var(--spacing-sm)',
+  marginRight: 'var(--spacing-xs)',
   objectFit: 'cover',
   border: '2px solid white',
 };
@@ -908,20 +1192,21 @@ const testimonialImageStyle: React.CSSProperties = {
 const testimonialNameStyle: React.CSSProperties = {
   fontWeight: 600,
   marginBottom: '2px',
+  fontSize: '0.9rem',
 };
 
 const testimonialInfoStyle: React.CSSProperties = {
-  fontSize: '0.9rem',
+  fontSize: '0.8rem',
   opacity: 0.8,
 };
 
 const formSuccessStyle: React.CSSProperties = {
   textAlign: 'center',
-  padding: 'var(--spacing-xl) var(--spacing-lg)',
+  padding: 'var(--spacing-lg) var(--spacing-md)',
 };
 
 const successIconStyle: React.CSSProperties = {
-  fontSize: '4rem',
+  fontSize: '3rem',
   color: 'var(--success)',
   marginBottom: 'var(--spacing-md)',
 };
@@ -929,10 +1214,10 @@ const successIconStyle: React.CSSProperties = {
 const submitAnotherButtonStyle: React.CSSProperties = {
   backgroundColor: 'var(--primary)',
   color: 'white',
-  padding: 'var(--spacing-sm) var(--spacing-lg)',
+  padding: 'var(--spacing-xs) var(--spacing-md)',
   borderRadius: 'var(--border-radius-md)',
   border: 'none',
-  fontSize: '1rem',
+  fontSize: '0.95rem',
   fontWeight: 500,
   cursor: 'pointer',
   transition: 'background-color var(--transition-fast)',
@@ -940,39 +1225,39 @@ const submitAnotherButtonStyle: React.CSSProperties = {
 };
 
 const inquiryFaqStyle: React.CSSProperties = {
-  padding: 'var(--spacing-xl) 0',
+  padding: 'var(--spacing-lg) 0',
   backgroundColor: 'var(--light-bg)',
 };
 
 const sectionTitleStyle: React.CSSProperties = {
   color: 'var(--primary)',
-  marginBottom: 'var(--spacing-xl)',
+  marginBottom: 'var(--spacing-lg)',
+  fontSize: '1.5rem',
 };
-
-// We'll define this inside the component to use isMobile state
 
 const faqItemStyle: React.CSSProperties = {
   backgroundColor: 'white',
   borderRadius: 'var(--border-radius-md)',
-  padding: 'var(--spacing-lg)',
+  padding: 'var(--spacing-md)',
   boxShadow: 'var(--shadow-sm)',
 };
 
 const faqQuestionStyle: React.CSSProperties = {
   color: 'var(--primary)',
   marginBottom: 'var(--spacing-sm)',
-  fontSize: '1.1rem',
+  fontSize: '1rem',
 };
 
 const faqAnswerStyle: React.CSSProperties = {
   color: 'var(--text-dark)',
-  lineHeight: 1.6,
+  lineHeight: 1.5,
+  fontSize: '0.9rem',
 };
 
 const errorMessageStyle: React.CSSProperties = {
   color: 'var(--error)',
-  fontSize: '0.85rem',
-  marginTop: '5px',
+  fontSize: '0.8rem',
+  marginTop: '4px',
 };
 
 const requiredStyle: React.CSSProperties = {

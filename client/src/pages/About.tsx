@@ -12,6 +12,195 @@ const About = () => {
 
   return (
     <div className="about-page">
+      {/* Embedded CSS with responsive adjustments */}
+      <style>
+        {`
+
+        .about-page{
+        overflow-x: hidden !important;
+        }
+          .about-image img {
+            transition: transform 0.3s ease;
+            max-width: 100%;
+            height: auto;
+          }
+          .about-image img:hover {
+            transform: scale(1.05) translateZ(20px);
+          }
+
+          .value-card {
+            border: 2px solid transparent;
+            transition: transform 0.3s ease, border-color 0.5s ease, box-shadow 0.3s ease;
+          }
+
+          .value-card:hover {
+            border-color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+          }
+
+          /* Ensure container is responsive */
+          .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 16px;
+          }
+
+          /* Disable hover effects on touch devices */
+          @media (hover: none) {
+            .about-image img:hover {
+              transform: none;
+            }
+            .value-card:hover {
+              border-color: transparent;
+              transform: none;
+              box-shadow: none;
+            }
+          }
+
+          /* About grid base styles (single column, content first) */
+          .about-grid {
+            display: flex;
+            flex-direction: column; /* Stack vertically */
+            gap: 24px;
+            align-items: center; /* Center items */
+          }
+
+          .about-content, .about-image {
+            width: 100%;
+            max-width: 600px; /* Limit width for readability */
+            text-align: center; /* Center text */
+          }
+
+          .about-image img {
+            width: 100%;
+            max-width: 500px; /* Limit image size */
+            margin: 0 auto; /* Center image */
+            display: block;
+          }
+
+          /* Mobile styles */
+          @media (max-width: 767px) {
+            .container {
+              padding: 0 12px;
+            }
+
+            .about-grid {
+              gap: 16px; /* Smaller gap for mobile */
+            }
+
+            .about-content {
+              padding: 0 8px;
+            }
+
+            .about-image img {
+              max-width: 100%; /* Full width on small screens */
+            }
+
+            .values-grid {
+              grid-template-columns: 1fr;
+              gap: 24px;
+            }
+
+            .team-grid {
+              grid-template-columns: 1fr;
+              gap: 24px;
+            }
+
+            .team-image {
+              height: 200px; /* Slightly smaller for mobile */
+            }
+
+            .achievements-timeline {
+              margin: 24px 0;
+            }
+
+            .timeline-item {
+              width: 100% !important;
+              text-align: left;
+              margin-bottom: 32px;
+            }
+
+            .timeline-year {
+              left: 0 !important;
+              transform: none !important;
+              top: -24px;
+            }
+
+            .timeline-line {
+              left: 8px;
+              width: 4px;
+              transform: none;
+            }
+
+            h2 {
+              font-size: 1.5rem;
+            }
+
+            p, .value-desc, .achievement-desc {
+              font-size: 0.9rem;
+            }
+
+            .team-social a {
+              width: 36px;
+              height: 36px;
+            }
+          }
+
+          /* Tablet styles */
+          @media (min-width: 768px) and (max-width: 1023px) {
+            .container {
+              max-width: 720px;
+            }
+
+            .about-grid {
+              gap: 20px;
+            }
+
+            .about-content, .about-image {
+              max-width: 700px; /* Slightly wider for tablets */
+            }
+
+            .values-grid {
+              grid-template-columns: repeat(2, 1fr);
+              gap: 24px;
+            }
+
+            .team-grid {
+              grid-template-columns: repeat(2, 1fr);
+              gap: 24px;
+            }
+
+            .timeline-item {
+              width: 48%;
+            }
+
+            h2 {
+              font-size: 1.75rem;
+            }
+          }
+
+          /* Desktop styles (maintain single-column layout for about-grid) */
+          @media (min-width: 1024px) {
+            .about-grid {
+              gap: 24px;
+            }
+
+            .about-content, .about-image {
+              max-width: 800px; /* Wider for desktop */
+            }
+
+            .values-grid {
+              grid-template-columns: repeat(4, 1fr);
+            }
+
+            .team-grid {
+              grid-template-columns: repeat(4, 1fr);
+            }
+          }
+        `}
+      </style>
+
       <Header />
       <PageHeader 
         title="About Us" 
@@ -29,17 +218,22 @@ const About = () => {
               <p>Over the years, we have helped thousands of students navigate the complex process of studying abroad, from selecting the right university to settling into their new environment. Our success is measured by the achievements of our students who have gone on to build successful careers and fulfilling lives.</p>
             </div>
             <div className="about-image" style={aboutImageStyle} data-aos="fade-left">
-              <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="StudyVista team" style={{borderRadius: 'var(--border-radius-lg)', boxShadow: 'var(--shadow-lg)'}} />
+              <img
+                src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+                alt="StudyVista team"
+                style={{ borderRadius: 'var(--border-radius-lg)', boxShadow: 'var(--shadow-lg)' }}
+              />
             </div>
           </div>
         </div>
       </section>
       
+      {/* Rest of the sections remain unchanged */}
       <section className="our-mission" style={ourMissionStyle}>
         <div className="container">
           <div className="mission-content" style={missionContentStyle} data-aos="fade-up">
-            <h2 style={{...sectionTitleStyle, textAlign: 'center', color: 'white'}}>Our Mission</h2>
-            <p style={{textAlign: 'center', color: 'white', maxWidth: '800px', margin: '0 auto'}}>
+            <h2 style={{ ...sectionTitleStyle, textAlign: 'center', color: 'white' }}>Our Mission</h2>
+            <p style={{ textAlign: 'center', color: 'white', maxWidth: '800px', margin: '0 auto' }}>
               Our mission is to empower students to achieve their academic and career goals through personalized guidance, comprehensive support, and unwavering commitment to their success. We strive to be the bridge that connects ambitious students with world-class educational opportunities.
             </p>
           </div>
@@ -66,8 +260,8 @@ const About = () => {
       
       <section className="team-section" style={teamSectionStyle}>
         <div className="container">
-          <h2 style={{...sectionTitleStyle, textAlign: 'center'}} data-aos="fade-up">Our Expert Team</h2>
-          <p style={{textAlign: 'center', maxWidth: '800px', margin: '0 auto var(--spacing-xl)'}} data-aos="fade-up">
+          <h2 style={{ ...sectionTitleStyle, textAlign: 'center' }} data-aos="fade-up">Our Expert Team</h2>
+          <p style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto var(--spacing-xl)' }} data-aos="fade-up">
             Our team consists of experienced education consultants, career advisors, and international education specialists who are dedicated to helping students achieve their dreams.
           </p>
           
@@ -81,7 +275,7 @@ const About = () => {
                 data-aos-delay={index * 100}
               >
                 <div className="team-image" style={teamImageStyle}>
-                  <img src={member.image} alt={member.name} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+                  <img src={member.image} alt={member.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
                 <div className="team-info" style={teamInfoStyle}>
                   <h3 style={teamNameStyle}>{member.name}</h3>
@@ -100,7 +294,7 @@ const About = () => {
       
       <section className="achievements" style={achievementsStyle}>
         <div className="container">
-          <h2 style={{...sectionTitleStyle, textAlign: 'center', color: 'white'}} data-aos="fade-up">Our Achievements</h2>
+          <h2 style={{ ...sectionTitleStyle, textAlign: 'center', color: 'white' }} data-aos="fade-up">Our Achievements</h2>
           <div className="achievements-timeline" style={achievementsTimelineStyle}>
             {achievements.map((achievement, index) => (
               <div 
@@ -131,7 +325,7 @@ const About = () => {
   );
 };
 
-// Data
+// Data and Styles remain unchanged
 const values = [
   {
     icon: 'fas fa-handshake',
@@ -157,23 +351,23 @@ const values = [
 
 const teamMembers = [
   {
-    name: 'Dr. Sarah Williams',
+    name: 'Lorem',
     position: 'Founder & CEO',
     image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80'
   },
   {
-    name: 'Michael Chen',
-    position: 'Head of Academic Counseling',
+    name: 'Lorem',
+    position: 'Founder & CEO',
     image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80'
   },
   {
-    name: 'Priya Sharma',
-    position: 'Visa Specialist',
+    name: 'Lorem',
+    position: 'Founder & CEO',
     image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80'
   },
   {
-    name: 'James Thompson',
-    position: 'Career Advisor',
+    name: 'Lorem',
+    position: 'Founder & CEO',
     image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80'
   }
 ];
@@ -211,25 +405,23 @@ const achievements = [
   }
 ];
 
-// Styles
 const aboutIntroStyle: React.CSSProperties = {
   padding: 'var(--spacing-xl) 0',
   backgroundColor: 'white',
 };
 
 const aboutGridStyle: React.CSSProperties = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(2, 1fr)',
+  display: 'flex',
+  flexDirection: 'column',
   gap: 'var(--spacing-xl)',
   alignItems: 'center',
 };
 
-const aboutContentStyle: React.CSSProperties = {
-  
-};
+const aboutContentStyle: React.CSSProperties = {};
 
 const aboutImageStyle: React.CSSProperties = {
-  
+  position: 'relative',
+  perspective: '1000px',
 };
 
 const sectionTitleStyle: React.CSSProperties = {
@@ -259,7 +451,6 @@ const valueCardStyle: React.CSSProperties = {
   backgroundColor: 'rgba(255, 255, 255, 0.1)',
   borderRadius: 'var(--border-radius-lg)',
   padding: 'var(--spacing-lg)',
-  transition: 'transform var(--transition-medium)',
   cursor: 'pointer',
 };
 

@@ -195,8 +195,10 @@ const Blog = () => {
     borderRadius: 'var(--border-radius-lg)',
     overflow: 'hidden',
     boxShadow: 'var(--shadow-md)',
-    transition: 'transform var(--transition-medium), box-shadow var(--transition-medium)',
+    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
     cursor: 'pointer',
+    transform: 'perspective(1000px) translateZ(0)',
+    transformStyle: 'preserve-3d', // Ensure 3D transforms are preserved
   };
   
   const blogImageStyle: React.CSSProperties = {
@@ -409,6 +411,30 @@ const Blog = () => {
 
   return (
     <div className="blog-page">
+
+      <style>
+        {
+          `
+          /* Blog.css */
+
+/* Target the blog-card class with higher specificity */
+div.blog-card {
+  transform-style: preserve-3d;
+}
+
+/* Hover effect for 3D come-up animation */
+div.blog-card:hover {
+  transform: perspective(1000px) translateY(-10px) translateZ(20px) rotateX(2deg) !important;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Enhance image scaling on hover */
+div.blog-card:hover .blog-image img {
+  transform: scale(1.05) !important;
+}
+          `
+        }
+      </style>
       <Header />
       <PageHeader 
         title={currentPost ? 'Blog Post' : 'Blog'} 
@@ -561,7 +587,7 @@ const Blog = () => {
             </div>
             
             <div className="related-posts" style={relatedPostsStyle} data-aos="fade-up">
-              <h3 style={{...sectionTitleStyle, textAlign: 'center'}}>Related Articles</h3>
+           
               <div className="related-posts-grid" style={relatedPostsGridStyle}>
                 {blogPosts
                   .filter(post => post.id !== currentPost.id && post.category === currentPost.category)
@@ -602,7 +628,7 @@ const Blog = () => {
                 style={newsletterInputStyle}
               />
               <button style={newsletterButtonStyle}>
-                Subscribe <i className="fas fa-paper-plane" style={{marginLeft: '8px'}}></i>
+                Get in touch <i className="fas fa-paper-plane" style={{marginLeft: '8px'}}></i>
               </button>
             </div>
           </div>

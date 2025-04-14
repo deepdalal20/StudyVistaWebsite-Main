@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'wouter';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import PageHeader from '../components/PageHeader';
@@ -28,20 +29,14 @@ const Countries = () => {
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
   const [activeTab, setActiveTab] = useState<string>('overview');
   const [isMobile, setIsMobile] = useState(false);
-  
+
   useEffect(() => {
-    // Handle resize for responsive design
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
     
-    // Initial check
     handleResize();
-    
-    // Add event listener
     window.addEventListener('resize', handleResize);
-    
-    // Cleanup event listener
     return () => {
       window.removeEventListener('resize', handleResize);
     };
@@ -50,8 +45,6 @@ const Countries = () => {
   const openCountryDetails = (country: Country) => {
     setSelectedCountry(country);
     setActiveTab('overview');
-    
-    // Scroll to details section
     setTimeout(() => {
       const detailsSection = document.getElementById('country-details');
       if (detailsSection) {
@@ -62,11 +55,28 @@ const Countries = () => {
 
   return (
     <div className="countries-page">
+      {/* *** CHANGE 1: Moved <style> tag to root *** */}
+      <style>
+      {`
+    .country-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+      perspective: 1000px;
+      -webkit-perspective: 1000px;
+    }
+
+    .country-card:hover {
+      transform: translateY(-10px) scale(1.05) rotateX(5deg) !important;
+      -webkit-transform: translateY(-10px) scale(1.05) rotateX(5deg);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2) important; 
+      z-index: 10;
+    }
+  `}
+      </style>
       <Header />
       <PageHeader 
         title="Study Destinations" 
         subtitle="Explore top destinations for international education" 
-        backgroundImage="https://images.unsplash.com/photo-1526778548025-fa2f459cd5ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+        backgroundImage="https://media.istockphoto.com/id/510152502/photo/art-summer-vacation-ocean-beach.jpg?s=612x612&w=0&k=20&c=g5IKeiawhv7vdhkdNavEYT8q_6PpVNikf_p9vkICIv0="
       />
       
       <section className="countries-intro" style={countriesIntroStyle}>
@@ -83,26 +93,26 @@ const Countries = () => {
           
           <div className="countries-grid" style={countriesGridStyle}>
             {countries.map((country, index) => (
-              <div 
-                key={country.id} 
-                className="country-card" 
+              <div
+                key={country.id}
+                className="country-card"
                 style={countryCardStyle}
                 data-aos="fade-up"
                 data-aos-delay={index * 100}
                 onClick={() => openCountryDetails(country)}
               >
                 <div className="country-image" style={countryImageStyle}>
-                  <img 
-                    src={country.image} 
-                    alt={`${country.name} education`} 
-                    style={{width: '100%', height: '100%', objectFit: 'cover'}}
+                  <img
+                    src={country.image}
+                    alt={`${country.name} education`}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                   <div className="country-overlay" style={countryOverlayStyle}>
                     <div className="country-flag" style={countryFlagStyle}>
-                      <img 
-                        src={`https://flagcdn.com/w80/${country.code.toLowerCase()}.png`} 
-                        alt={`${country.name} flag`} 
-                        style={{width: '100%', height: '100%', objectFit: 'cover'}}
+                      <img
+                        src={`https://flagcdn.com/w80/${country.code.toLowerCase()}.png`}
+                        alt={`${country.name} flag`}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                       />
                     </div>
                   </div>
@@ -111,7 +121,7 @@ const Countries = () => {
                   <h3 style={countryNameStyle}>{country.name}</h3>
                   <p style={countryDescStyle}>{country.description.substring(0, 100)}...</p>
                   <button style={countryButtonStyle}>
-                    Explore {country.name} <i className="fas fa-arrow-right" style={{marginLeft: '8px'}}></i>
+                    Explore {country.name} <i className="fas fa-arrow-right" style={{ marginLeft: '8px' }}></i>
                   </button>
                 </div>
               </div>
@@ -140,7 +150,7 @@ const Countries = () => {
                   style={{
                     ...countryTabStyle,
                     backgroundColor: activeTab === 'overview' ? 'var(--primary)' : 'transparent',
-                    color: activeTab === 'overview' ? 'white' : 'var(--text-dark)'
+                    color: activeTab === 'overview' ? 'white' : 'var(--text-dark)',
                   }}
                   onClick={() => setActiveTab('overview')}
                 >
@@ -151,7 +161,7 @@ const Countries = () => {
                   style={{
                     ...countryTabStyle,
                     backgroundColor: activeTab === 'universities' ? 'var(--primary)' : 'transparent',
-                    color: activeTab === 'universities' ? 'white' : 'var(--text-dark)'
+                    color: activeTab === 'universities' ? 'white' : 'var(--text-dark)',
                   }}
                   onClick={() => setActiveTab('universities')}
                 >
@@ -162,7 +172,7 @@ const Countries = () => {
                   style={{
                     ...countryTabStyle,
                     backgroundColor: activeTab === 'visa' ? 'var(--primary)' : 'transparent',
-                    color: activeTab === 'visa' ? 'white' : 'var(--text-dark)'
+                    color: activeTab === 'visa' ? 'white' : 'var(--text-dark)',
                   }}
                   onClick={() => setActiveTab('visa')}
                 >
@@ -173,7 +183,7 @@ const Countries = () => {
                   style={{
                     ...countryTabStyle,
                     backgroundColor: activeTab === 'costs' ? 'var(--primary)' : 'transparent',
-                    color: activeTab === 'costs' ? 'white' : 'var(--text-dark)'
+                    color: activeTab === 'costs' ? 'white' : 'var(--text-dark)',
                   }}
                   onClick={() => setActiveTab('costs')}
                 >
@@ -188,7 +198,6 @@ const Countries = () => {
                   <div className="country-description" style={countryDescriptionStyle}>
                     <p>{selectedCountry.description}</p>
                   </div>
-                  
                   <div className="country-highlights" style={countryHighlightsStyle}>
                     <h3 style={tabSubtitleStyle}>Key Highlights</h3>
                     <ul style={highlightListStyle}>
@@ -200,12 +209,11 @@ const Countries = () => {
                       ))}
                     </ul>
                   </div>
-                  
                   <div className="country-image-gallery" style={countryImageGalleryStyle}>
                     <img 
                       src={selectedCountry.image} 
                       alt={`Education in ${selectedCountry.name}`} 
-                      style={{width: '100%', height: '100%', objectFit: 'cover', borderRadius: 'var(--border-radius-lg)'}}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 'var(--border-radius-lg)' }}
                     />
                   </div>
                 </div>
@@ -232,7 +240,7 @@ const Countries = () => {
                           </ul>
                         </div>
                         <button style={universityButtonStyle}>
-                          View Details <i className="fas fa-external-link-alt" style={{marginLeft: '5px'}}></i>
+                          View Details <i className="fas fa-external-link-alt" style={{ marginLeft: '5px' }}></i>
                         </button>
                       </div>
                     ))}
@@ -245,7 +253,7 @@ const Countries = () => {
                   <h3 style={tabSubtitleStyle}>Visa Requirements for {selectedCountry.name}</h3>
                   <div className="visa-requirements" style={visaRequirementsStyle}>
                     <div className="visa-process" style={visaProcessStyle}>
-                      <h4 style={{marginBottom: 'var(--spacing-md)'}}>Student Visa Process</h4>
+                      <h4 style={{ marginBottom: 'var(--spacing-md)' }}>Student Visa Process</h4>
                       <ol style={visaStepsStyle}>
                         {selectedCountry.visaRequirements.map((requirement, index) => (
                           <li key={index} style={visaStepItemStyle}>
@@ -260,16 +268,28 @@ const Countries = () => {
                     <div className="visa-support" style={visaSupportStyle}>
                       <h4>How StudyVista Can Help</h4>
                       <p>Our visa counselors provide comprehensive support throughout the visa application process:</p>
-                      <ul style={{paddingLeft: 'var(--spacing-md)', marginTop: 'var(--spacing-sm)'}}>
+                      <ul style={{ paddingLeft: 'var(--spacing-md)', marginTop: 'var(--spacing-sm)' }}>
                         <li>Document preparation guidance</li>
                         <li>Application review</li>
                         <li>Interview preparation</li>
                         <li>Visa status tracking</li>
                         <li>Pre-departure briefing</li>
                       </ul>
-                      <button style={{...countryButtonStyle, marginTop: 'var(--spacing-md)'}}>
-                        Get Visa Assistance
-                      </button>
+                      <Link
+                        to="/inquiry"
+                        style={{
+                          ...countryButtonStyle,
+                          marginTop: 'var(--spacing-md)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          textDecoration: 'none',
+                          width: 'auto',
+                          height: 'auto',
+                        }}
+                      >
+                        Get Visa Assistance <i className="fas fa-arrow-right" style={{ marginLeft: '8px' }}></i>
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -278,7 +298,6 @@ const Countries = () => {
               {activeTab === 'costs' && (
                 <div className="costs-tab" data-aos="fade">
                   <h3 style={tabSubtitleStyle}>Costs & Scholarships</h3>
-                  
                   <div className="costs-overview" style={costsOverviewStyle}>
                     <div className="cost-card" style={costCardStyle}>
                       <h4 style={costCardTitleStyle}>Average Tuition Fees</h4>
@@ -288,12 +307,11 @@ const Countries = () => {
                     <div className="cost-card" style={costCardStyle}>
                       <h4 style={costCardTitleStyle}>Living Expenses</h4>
                       <div style={costCardValueStyle}>{selectedCountry.averageLiving}</div>
-                      <p style={costCardDescStyle}>per year including accommodation</p>
+                      <p style={countryDescStyle}>per year including accommodation</p>
                     </div>
                   </div>
-                  
                   <div className="scholarships-section" style={scholarshipsSectionStyle}>
-                    <h4 style={{marginBottom: 'var(--spacing-md)'}}>Available Scholarships</h4>
+                    <h4 style={{ marginBottom: 'var(--spacing-md)' }}>Available Scholarships</h4>
                     <div className="scholarships-list" style={scholarshipsListStyle}>
                       {selectedCountry.scholarships.map((scholarship, index) => (
                         <div key={index} className="scholarship-item" style={scholarshipItemStyle}>
@@ -305,12 +323,23 @@ const Countries = () => {
                       ))}
                     </div>
                   </div>
-                  
-                  <div style={{textAlign: 'center', marginTop: 'var(--spacing-xl)'}}>
+                  <div style={{ textAlign: 'center', marginTop: 'var(--spacing-xl)' }}>
                     <p>Need help finding the right scholarship opportunities?</p>
-                    <button style={{...countryButtonStyle, marginTop: 'var(--spacing-sm)'}}>
-                      Schedule a Consultation
-                    </button>
+                    <Link
+                      to="/contact"
+                      style={{
+                        ...countryButtonStyle,
+                        marginTop: 'var(--spacing-sm)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        textDecoration: 'none',
+                        width: 'auto',
+                        height: 'auto',
+                      }}
+                    >
+                      Schedule a Consultation <i className="fas fa-arrow-right" style={{ marginLeft: '8px' }}></i>
+                    </Link>
                   </div>
                 </div>
               )}
@@ -324,11 +353,21 @@ const Countries = () => {
           <div className="cta-content" style={ctaContentStyle} data-aos="fade-up">
             <h2>Ready to Begin Your Journey?</h2>
             <p>Take the first step towards studying in your dream destination. Our expert counselors are ready to guide you.</p>
-            <a href="/inquiry" style={ctaButtonStyle}>
-              Contact Us Today <i className="fas fa-arrow-right" style={{marginLeft: '8px'}}></i>
-            </a>
+            <Link
+              to="/inquiry"
+              style={{
+                ...ctaButtonStyle,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                textDecoration: 'none',
+              }}
+            >
+              Contact Us Today <i className="fas fa-arrow-right" style={{ marginLeft: '8px' }}></i>
+            </Link>
           </div>
         </div>
+        {/* *** CHANGE 2: Removed duplicate <style> tag from here *** */}
       </section>
       
       <Footer />
@@ -488,7 +527,7 @@ const countries: Country[] = [
     id: 4,
     name: 'Canada',
     code: 'CA',
-    image: 'https://images.unsplash.com/photo-1569681157442-5f4473730baf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+    image: 'https://media.istockphoto.com/id/525508231/photo/moraine-lake-rocky-mountains-canada.jpg?s=612x612&w=0&k=20&c=a4pWewQGlZSblXWROA5o5ayaN5R7XPfDGOQ43B88IzY=',
     description: 'Canada is known for its high-quality education system, affordable tuition fees compared to many other English-speaking countries, and welcoming immigration policies. Canadian institutions emphasize research and practical learning, equipping students with skills valued by employers worldwide. The country offers a safe, stable environment with stunning natural landscapes and culturally diverse cities. Graduates benefit from excellent post-study work opportunities and pathways to permanent residency.',
     highlights: [
       'World-renowned for quality education at affordable tuition rates',
@@ -654,13 +693,18 @@ const countriesGridStyle: React.CSSProperties = {
   gap: 'var(--spacing-lg)',
 };
 
+// *** CHANGE 3: Ensured countryCardStyle is correct ***
 const countryCardStyle: React.CSSProperties = {
   backgroundColor: 'white',
   borderRadius: 'var(--border-radius-lg)',
   overflow: 'hidden',
   boxShadow: 'var(--shadow-md)',
-  transition: 'transform var(--transition-medium), box-shadow var(--transition-medium)',
   cursor: 'pointer',
+  position: 'relative',
+  transform: 'translateY(0) rotateX(0deg)',
+  transformStyle: 'preserve-3d',
+  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+  perspective: '1000px', // Enhances 3D effect
 };
 
 const countryImageStyle: React.CSSProperties = {
@@ -856,16 +900,13 @@ const universityButtonStyle: React.CSSProperties = {
   transition: 'all var(--transition-fast)',
 };
 
-// Update the visa requirements style to be more responsive using CSS Grid
 const visaRequirementsStyle: React.CSSProperties = {
   display: 'grid',
   gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
   gap: 'var(--spacing-lg)',
 };
 
-const visaProcessStyle: React.CSSProperties = {
-  
-};
+const visaProcessStyle: React.CSSProperties = {};
 
 const visaStepsStyle: React.CSSProperties = {
   listStyle: 'none',

@@ -20,20 +20,13 @@ const Gallery = () => {
   const [filter, setFilter] = useState<string>('all');
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
   const [isMobile, setIsMobile] = useState(false);
-  
+
   useEffect(() => {
-    // Handle resize for responsive design
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
-    
-    // Initial check
     handleResize();
-    
-    // Add event listener
     window.addEventListener('resize', handleResize);
-    
-    // Cleanup event listener
     return () => {
       window.removeEventListener('resize', handleResize);
     };
@@ -43,28 +36,26 @@ const Gallery = () => {
     setFilter(category);
   };
 
-  const filteredImages = filter === 'all' 
-    ? galleryImages 
+  const filteredImages = filter === 'all'
+    ? galleryImages
     : galleryImages.filter(image => image.category === filter);
 
   const openLightbox = (image: GalleryImage) => {
     setSelectedImage(image);
-    document.body.style.overflow = 'hidden'; // Prevent scrolling when lightbox is open
+    document.body.style.overflow = 'hidden';
   };
 
   const closeLightbox = () => {
     setSelectedImage(null);
-    document.body.style.overflow = 'auto'; // Re-enable scrolling
+    document.body.style.overflow = 'auto';
   };
 
-  // Close lightbox when Escape key is pressed
   useEffect(() => {
     const handleEscKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         closeLightbox();
       }
     };
-
     window.addEventListener('keydown', handleEscKey);
     return () => {
       window.removeEventListener('keydown', handleEscKey);
@@ -73,13 +64,32 @@ const Gallery = () => {
 
   return (
     <div className="gallery-page">
+      {/* Embedded CSS for hover animations */}
+      <style>
+        {`
+          div.gallery-item {
+      transform-style: preserve-3d;
+    }
+    div.gallery-item:hover {
+      transform: perspective(1000px) translateY(-10px) translateZ(20px) rotateX(2deg) !important;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2) !important;
+    }
+    div.gallery-item:hover .gallery-image img {
+      transform: scale(1.05) !important;
+    }
+    div.gallery-item:hover .gallery-overlay {
+      opacity: 1;
+    }
+        `}
+      </style>
+
       <Header />
-      <PageHeader 
-        title="Gallery" 
-        subtitle="Explore our campus, events, and student life through captivating imagery" 
+      <PageHeader
+        title="Gallery"
+        subtitle="Explore our campus, events, and student life through captivating imagery"
         backgroundImage="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
       />
-      
+
       <section className="gallery-section" style={gallerySectionStyle}>
         <div className="container">
           <div className="gallery-intro" style={galleryIntroStyle} data-aos="fade-up">
@@ -88,74 +98,74 @@ const Gallery = () => {
               Welcome to our gallery showcasing StudyVista's events, campus tours, student success stories, and glimpses of life at top universities worldwide. These images capture the essence of international education and the vibrant experiences that await our students.
             </p>
           </div>
-          
+
           <div className="gallery-filter" style={galleryFilterStyle} data-aos="fade-up">
-            <button 
+            <button
               style={{
                 ...filterButtonStyle,
-                backgroundColor: filter === 'all' ? 'var(--primary)' : 'transparent',
-                color: filter === 'all' ? 'white' : 'var(--text-dark)',
+                backgroundColor: filter === 'all' ? 'var(--primary, #1a73e8)' : 'transparent',
+                color: filter === 'all' ? 'white' : 'var(--text-dark, #333)',
               }}
               onClick={() => filterImages('all')}
             >
               All
             </button>
-            <button 
+            <button
               style={{
                 ...filterButtonStyle,
-                backgroundColor: filter === 'events' ? 'var(--primary)' : 'transparent',
-                color: filter === 'events' ? 'white' : 'var(--text-dark)',
+                backgroundColor: filter === 'events' ? 'var(--primary, #1a73e8)' : 'transparent',
+                color: filter === 'events' ? 'white' : 'var(--text-dark, #333)',
               }}
               onClick={() => filterImages('events')}
             >
               Events
             </button>
-            <button 
+            <button
               style={{
                 ...filterButtonStyle,
-                backgroundColor: filter === 'campus' ? 'var(--primary)' : 'transparent',
-                color: filter === 'campus' ? 'white' : 'var(--text-dark)',
+                backgroundColor: filter === 'campus' ? 'var(--primary, #1a73e8)' : 'transparent',
+                color: filter === 'campus' ? 'white' : 'var(--text-dark, #333)',
               }}
               onClick={() => filterImages('campus')}
             >
               Campus Tours
             </button>
-            <button 
+            <button
               style={{
                 ...filterButtonStyle,
-                backgroundColor: filter === 'students' ? 'var(--primary)' : 'transparent',
-                color: filter === 'students' ? 'white' : 'var(--text-dark)',
+                backgroundColor: filter === 'students' ? 'var(--primary, #1a73e8)' : 'transparent',
+                color: filter === 'students' ? 'white' : 'var(--text-dark, #333)',
               }}
               onClick={() => filterImages('students')}
             >
               Student Life
             </button>
-            <button 
+            <button
               style={{
                 ...filterButtonStyle,
-                backgroundColor: filter === 'graduations' ? 'var(--primary)' : 'transparent',
-                color: filter === 'graduations' ? 'white' : 'var(--text-dark)',
+                backgroundColor: filter === 'graduations' ? 'var(--primary, #1a73e8)' : 'transparent',
+                color: filter === 'graduations' ? 'white' : 'var(--text-dark, #333)',
               }}
               onClick={() => filterImages('graduations')}
             >
               Graduations
             </button>
           </div>
-          
+
           <div className="gallery-grid" style={galleryGridStyle}>
             {filteredImages.map((image, index) => (
-              <div 
-                key={image.id} 
-                className="gallery-item" 
+              <div
+                key={image.id}
+                className="gallery-item"
                 style={galleryItemStyle}
                 data-aos="fade-up"
                 data-aos-delay={index % 6 * 100}
                 onClick={() => openLightbox(image)}
               >
                 <div className="gallery-image" style={galleryImageStyle}>
-                  <img 
-                    src={image.image} 
-                    alt={image.title} 
+                  <img
+                    src={image.image}
+                    alt={image.title}
                     style={imageStyle}
                   />
                   <div className="gallery-overlay" style={galleryOverlayStyle}>
@@ -171,22 +181,21 @@ const Gallery = () => {
               </div>
             ))}
           </div>
-          
-          {/* Lightbox */}
+
           {selectedImage && (
             <div className="lightbox" style={lightboxStyle} onClick={closeLightbox}>
               <div className="lightbox-content" style={lightboxContentStyle} onClick={e => e.stopPropagation()}>
                 <button className="close-button" style={closeButtonStyle} onClick={closeLightbox}>
                   <i className="fas fa-times"></i>
                 </button>
-                <img 
-                  src={selectedImage.image} 
-                  alt={selectedImage.title} 
+                <img
+                  src={selectedImage.image}
+                  alt={selectedImage.title}
                   style={lightboxImageStyle}
                 />
                 <div style={lightboxCaptionStyle}>
                   <h3>{selectedImage.title}</h3>
-                  <span style={{...categoryBadgeStyle, display: 'inline-block', marginTop: 'var(--spacing-xs)'}}>
+                  <span style={{ ...categoryBadgeStyle, display: 'inline-block', marginTop: 'var(--spacing-xs, 8px)' }}>
                     {selectedImage.category}
                   </span>
                 </div>
@@ -195,19 +204,19 @@ const Gallery = () => {
           )}
         </div>
       </section>
-      
+
       <section className="gallery-cta" style={galleryCtaStyle}>
         <div className="container">
           <div className="cta-content" style={ctaContentStyle} data-aos="fade-up">
             <h2>Want to Visit Our Campuses?</h2>
             <p>Schedule a campus tour or virtual visit to explore your potential study destinations.</p>
             <a href="/contact" style={ctaButtonStyle}>
-              Contact Us <i className="fas fa-arrow-right" style={{marginLeft: '8px'}}></i>
+              Contact Us <i className="fas fa-arrow-right" style={{ marginLeft: '8px' }}></i>
             </a>
           </div>
         </div>
       </section>
-      
+
       <Footer />
       <BackToTop />
     </div>
@@ -226,7 +235,7 @@ const galleryImages: GalleryImage[] = [
     id: 2,
     title: 'Harvard University Campus Visit',
     category: 'campus',
-    image: 'https://images.unsplash.com/photo-1605806616949-1e87b487fc2f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1348&q=80'
+    image: 'https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
   },
   {
     id: 3,
@@ -250,7 +259,7 @@ const galleryImages: GalleryImage[] = [
     id: 6,
     title: 'University of Toronto Campus Tour',
     category: 'campus',
-    image: 'https://images.unsplash.com/photo-1574159333161-a23a9a6c7790?ixlib=rb-1.2.1&auto=format&fit=crop&w=1349&q=80'
+    image: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
   },
   {
     id: 7,
@@ -274,7 +283,7 @@ const galleryImages: GalleryImage[] = [
     id: 10,
     title: 'MIT Graduation Day',
     category: 'graduations',
-    image: 'https://images.unsplash.com/photo-1593715857983-5c00c91d0836?ixlib=rb-1.2.1&auto=format&fit=crop&w=1354&q=80'
+    image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
   },
   {
     id: 11,
@@ -304,62 +313,63 @@ const galleryImages: GalleryImage[] = [
     id: 15,
     title: 'Cambridge University Graduation',
     category: 'graduations',
-    image: 'https://images.unsplash.com/photo-1523289961518-a9e72c98c732?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+    image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
   }
 ];
 
 // Styles
 const gallerySectionStyle: React.CSSProperties = {
-  padding: 'var(--spacing-xl) 0',
+  padding: 'var(--spacing-xl, 60px) 0',
   backgroundColor: 'white',
 };
 
 const galleryIntroStyle: React.CSSProperties = {
   textAlign: 'center',
   maxWidth: '800px',
-  margin: '0 auto var(--spacing-xl)',
+  margin: '0 auto var(--spacing-xl, 60px)',
 };
 
 const sectionTitleStyle: React.CSSProperties = {
-  color: 'var(--primary)',
-  marginBottom: 'var(--spacing-md)',
+  color: 'var(--primary, #1a73e8)',
+  marginBottom: 'var(--spacing-md, 20px)',
   position: 'relative',
-  paddingBottom: 'var(--spacing-sm)',
+  paddingBottom: 'var(--spacing-sm, 10px)',
 };
 
 const galleryFilterStyle: React.CSSProperties = {
   display: 'flex',
   justifyContent: 'center',
   flexWrap: 'wrap',
-  gap: 'var(--spacing-xs) var(--spacing-sm)',
-  marginBottom: 'var(--spacing-xl)',
+  gap: 'var(--spacing-xs, 8px) var(--spacing-sm, 16px)',
+  marginBottom: 'var(--spacing-xl, 60px)',
 };
 
 const filterButtonStyle: React.CSSProperties = {
-  padding: 'var(--spacing-xs) var(--spacing-md)',
-  borderRadius: 'var(--border-radius-md)',
-  border: '1px solid var(--primary)',
+  padding: 'var(--spacing-xs, 8px) var(--spacing-md, 20px)',
+  borderRadius: 'var(--border-radius-md, 8px)',
+  border: '1px solid var(--primary, #1a73e8)',
   backgroundColor: 'transparent',
-  color: 'var(--primary)',
+  color: 'var(--primary, #1a73e8)',
   fontWeight: 500,
   cursor: 'pointer',
-  transition: 'all var(--transition-fast)',
+  transition: 'all 0.2s ease',
 };
 
 const galleryGridStyle: React.CSSProperties = {
   display: 'grid',
   gridTemplateColumns: 'repeat(auto-fill, minmax(270px, 1fr))',
-  gap: 'var(--spacing-md)',
+  gap: 'var(--spacing-md, 20px)',
 };
 
 const galleryItemStyle: React.CSSProperties = {
   cursor: 'pointer',
   overflow: 'hidden',
-  borderRadius: 'var(--border-radius-md)',
-  boxShadow: 'var(--shadow-md)',
-  transition: 'transform var(--transition-medium)',
+  borderRadius: 'var(--border-radius-md, 8px)',
+  boxShadow: 'var(--shadow-md, 0 4px 6px rgba(0,0,0,0.1))',
+  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+  transform: 'perspective(1000px) translateZ(0)',
+  transformStyle: 'preserve-3d', // Ensure 3D transforms are preserved
 };
-
 const galleryImageStyle: React.CSSProperties = {
   position: 'relative',
   height: '250px',
@@ -370,7 +380,6 @@ const imageStyle: React.CSSProperties = {
   width: '100%',
   height: '100%',
   objectFit: 'cover',
-  transition: 'transform var(--transition-medium)',
 };
 
 const galleryOverlayStyle: React.CSSProperties = {
@@ -384,31 +393,31 @@ const galleryOverlayStyle: React.CSSProperties = {
   alignItems: 'center',
   justifyContent: 'center',
   opacity: 0,
-  transition: 'opacity var(--transition-medium)',
+  transition: 'opacity 0.3s ease',
 };
 
 const overlayContentStyle: React.CSSProperties = {
   textAlign: 'center',
   color: 'white',
-  padding: 'var(--spacing-md)',
+  padding: 'var(--spacing-md, 20px)',
 };
 
 const imageTitleStyle: React.CSSProperties = {
   fontSize: '1.1rem',
-  marginBottom: 'var(--spacing-xs)',
+  marginBottom: 'var(--spacing-xs, 8px)',
 };
 
 const categoryBadgeStyle: React.CSSProperties = {
-  backgroundColor: 'var(--secondary)',
+  backgroundColor: 'var(--secondary, #34c759)',
   color: 'white',
   padding: '3px 10px',
-  borderRadius: 'var(--border-radius-sm)',
+  borderRadius: 'var(--border-radius-sm, 4px)',
   fontSize: '0.8rem',
   textTransform: 'capitalize',
 };
 
 const zoomIconStyle: React.CSSProperties = {
-  marginTop: 'var(--spacing-sm)',
+  marginTop: 'var(--spacing-sm, 16px)',
   fontSize: '1.5rem',
 };
 
@@ -423,7 +432,7 @@ const lightboxStyle: React.CSSProperties = {
   alignItems: 'center',
   justifyContent: 'center',
   zIndex: 1000,
-  padding: 'var(--spacing-lg)',
+  padding: 'var(--spacing-lg, 40px)',
 };
 
 const lightboxContentStyle: React.CSSProperties = {
@@ -447,19 +456,19 @@ const closeButtonStyle: React.CSSProperties = {
 const lightboxImageStyle: React.CSSProperties = {
   maxWidth: '100%',
   maxHeight: '75vh',
-  borderRadius: 'var(--border-radius-md)',
-  boxShadow: 'var(--shadow-lg)',
+  borderRadius: 'var(--border-radius-md, 8px)',
+  boxShadow: 'var(--shadow-lg, 0 10px 15px rgba(0,0,0,0.2))',
 };
 
 const lightboxCaptionStyle: React.CSSProperties = {
   color: 'white',
   textAlign: 'center',
-  marginTop: 'var(--spacing-md)',
+  marginTop: 'var(--spacing-md, 20px)',
 };
 
 const galleryCtaStyle: React.CSSProperties = {
-  padding: 'var(--spacing-xl) 0',
-  backgroundColor: 'var(--primary)',
+  padding: 'var(--spacing-xl, 60px) 0',
+  backgroundColor: 'var(--primary, #1a73e8)',
   color: 'white',
 };
 
@@ -471,13 +480,13 @@ const ctaContentStyle: React.CSSProperties = {
 
 const ctaButtonStyle: React.CSSProperties = {
   display: 'inline-block',
-  backgroundColor: 'var(--secondary)',
+  backgroundColor: 'var(--secondary, #34c759)',
   color: 'white',
-  padding: 'var(--spacing-sm) var(--spacing-lg)',
-  borderRadius: 'var(--border-radius-md)',
+  padding: 'var(--spacing-sm, 16px) var(--spacing-lg, 40px)',
+  borderRadius: 'var(--border-radius-md, 8px)',
   fontWeight: 600,
-  marginTop: 'var(--spacing-md)',
-  transition: 'all var(--transition-fast)',
+  marginTop: 'var(--spacing-md, 20px)',
+  transition: 'all 0.2s ease',
 };
 
 export default Gallery;

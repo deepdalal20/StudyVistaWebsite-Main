@@ -43,7 +43,7 @@ const ServicesSection: React.FC = () => {
   ];
 
   return (
-    <section className="services" style={servicesStyle}>
+    <section className="services" style={servicesStyle} id='services'>
       <div className="container">
         <div className="section-title" style={sectionTitleStyle}>
           <h2 data-aos="fade-up">Our Services</h2>
@@ -56,7 +56,15 @@ const ServicesSection: React.FC = () => {
             <div 
               key={index} 
               className="service-card" 
-              style={serviceCardStyle}
+              style={{
+                ...serviceCardStyle,
+                transform: hoveredIndex === index 
+                  ? 'translateY(-10px)' // Moves the box up on hover
+                  : 'translateY(0)', // No move by default
+                boxShadow: hoveredIndex === index 
+                  ? '0 20px 30px rgba(0,0,0,0.2)' // More shadow for lifted effect
+                  : 'var(--shadow-md)', // Default shadow
+              }}
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
               data-aos="fade-up"
@@ -67,7 +75,6 @@ const ServicesSection: React.FC = () => {
                 style={{
                   ...serviceIconStyle,
                   backgroundColor: hoveredIndex === index ? 'var(--secondary)' : 'var(--primary)',
-                  transform: hoveredIndex === index ? 'rotateY(180deg)' : 'rotateY(0)'
                 }}
               >
                 <i className={`fas ${service.icon}`}></i>
@@ -103,6 +110,7 @@ const servicesGridStyle: React.CSSProperties = {
   display: 'grid',
   gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
   gap: 'var(--spacing-lg)',
+  perspective: '1000px', // Add perspective for 3D effect
 };
 
 const serviceCardStyle: React.CSSProperties = {
@@ -110,16 +118,12 @@ const serviceCardStyle: React.CSSProperties = {
   borderRadius: 'var(--border-radius-lg)',
   padding: 'var(--spacing-lg)',
   boxShadow: 'var(--shadow-md)',
-  transition: 'all var(--transition-medium)',
+  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
   display: 'flex',
   flexDirection: 'column',
   height: '100%',
-  transform: 'translateY(0)',
   cursor: 'pointer',
-  '&:hover': {
-    transform: 'translateY(-10px)',
-    boxShadow: 'var(--shadow-lg)',
-  }
+  willChange: 'transform',
 };
 
 const serviceIconStyle: React.CSSProperties = {

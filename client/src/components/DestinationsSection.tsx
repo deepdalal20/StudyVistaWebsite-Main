@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'wouter';
 
 interface Destination {
   id: number;
@@ -25,7 +26,7 @@ const DestinationsSection: React.FC = () => {
       id: 3,
       name: 'Australia',
       description: 'Innovation and quality education',
-      image: 'https://images.unsplash.com/photo-1513227344420-6c7c92a4a163?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80'
+      image: 'https://i.natgeofe.com/k/b76526f3-bb84-489d-b229-56bcc08aa915/australia-sydney-opera-house.jpg?wp=1&w=1084.125&h=611.625'
     },
     {
       id: 4,
@@ -96,10 +97,10 @@ const DestinationsSection: React.FC = () => {
           ))}
         </div>
         <div className="view-more" style={viewMoreStyle} data-aos="fade-up">
-          <a href="#" className="btn-view-more" style={btnViewMoreStyle}>
-            View All Destinations
-          </a>
-        </div>
+  <Link href="/hero" className="btn-view-more" style={btnViewMoreStyle}>
+    View All Destinations
+  </Link>
+</div>
       </div>
     </section>
   );

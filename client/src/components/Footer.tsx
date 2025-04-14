@@ -21,20 +21,21 @@ const Footer: React.FC = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+  
   return (
     <footer className="footer" style={footerStyle}>
       <div className="container">
         <div className="footer-grid" style={footerGridStyle}>
           <div className="footer-about" style={footerAboutStyle}>
             <div className="footer-logo" style={footerLogoStyle}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-secondary" style={{ color: 'var(--secondary)' }}>
-                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-                <line x1="12" y1="22.08" x2="12" y2="12"></line>
-              </svg>
-              <div className="logo-text" style={logoTextStyle}>
-                Study<span style={{ color: 'var(--secondary)' }}>Vista</span>
-              </div>
+            <Link to="/">
+    <img 
+      src="/mainlogo.png" 
+      alt="StudyVista Logo" 
+      width={80} 
+      height={40} 
+    />
+  </Link>
             </div>
             <p>StudyVista is a leading educational consultancy helping students achieve their dreams of studying abroad with personalized guidance and support.</p>
             <div className="social-links" style={socialLinksStyle}>
@@ -106,22 +107,22 @@ const Footer: React.FC = () => {
             <ul className="contact-details" style={contactDetailsStyle}>
               <li className="contact-item" style={contactItemStyle}>
                 <i className="fas fa-phone-alt contact-icon" style={contactIconStyle}></i>
-                <span>+91 8426535326</span>
+                <span>+91 12345 06789 </span>
               </li>
               <li className="contact-item" style={contactItemStyle}>
                 <i className="fas fa-envelope contact-icon" style={contactIconStyle}></i>
-                <span>abc@gmail.com</span>
+                <span>bemotion@gmail.com</span>
               </li>
               <li className="contact-item" style={contactItemStyle}>
                 <i className="fas fa-map-marker-alt contact-icon" style={contactIconStyle}></i>
-                <span>Yorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
+                <span>507, Luxuria TradeHub, Dumas Road-Surat</span>
               </li>
             </ul>
           </div>
         </div>
         
         <div className="footer-bottom" style={footerBottomStyle}>
-          <p>Copyright ©2025 On StudyVista, All Right Reserved<br/>Designed And Developed by InfiNitium</p>
+          <p>Copyright ©2025 On StudyVista, All Right Reserved<br/>Designed And Developed by <a href="https://www.bemotion.in/"><b>Bemotion</b></a></p>
         </div>
       </div>
     </footer>
@@ -142,22 +143,12 @@ const footerGridStyle: React.CSSProperties = {
   marginBottom: 'var(--spacing-xl)',
 };
 
-const footerAboutStyle: React.CSSProperties = {
-  
-};
+const footerAboutStyle: React.CSSProperties = {};
 
 const footerLogoStyle: React.CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   marginBottom: 'var(--spacing-md)',
-};
-
-const logoTextStyle: React.CSSProperties = {
-  fontFamily: 'Montserrat, sans-serif',
-  fontWeight: 700,
-  fontSize: '1.5rem',
-  color: 'white',
-  marginLeft: 'var(--spacing-sm)',
 };
 
 const footerTitleStyle: React.CSSProperties = {
@@ -166,7 +157,7 @@ const footerTitleStyle: React.CSSProperties = {
   color: 'white',
   position: 'relative',
   paddingBottom: 'var(--spacing-xs)',
-  borderBottom: '2px solid var(--secondary)'
+  borderBottom: '2px solid var(--secondary)',
 };
 
 const footerLinksStyle: React.CSSProperties = {
@@ -182,7 +173,7 @@ const footerLinkStyle: React.CSSProperties = {
   transition: 'color var(--transition-fast)',
   display: 'flex',
   alignItems: 'center',
-  textDecoration: 'none'
+  textDecoration: 'none',
 };
 
 const footerLinkIconStyle: React.CSSProperties = {
@@ -218,11 +209,11 @@ const socialLinkStyle: React.CSSProperties = {
   justifyContent: 'center',
   width: '40px',
   height: '40px',
-  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  backgroundColor: '#ef7f1a',  // Changed to orange
   color: 'white',
   borderRadius: '50%',
   transition: 'all var(--transition-fast)',
-  textDecoration: 'none'
+  textDecoration: 'none',
 };
 
 const footerBottomStyle: React.CSSProperties = {
