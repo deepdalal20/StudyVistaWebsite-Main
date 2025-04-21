@@ -1,0 +1,55 @@
+.officeGallery {
+    padding: var(--spacing-xl) 0;
+    background-color: var(--light-bg);
+  }
+  
+  .sectionTitle {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+  }
+  
+  .galleryGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+  }
+  
+  @media (max-width: 768px) {
+    .galleryGrid {
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+  }
+  
+  .galleryItem {
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    height: 200px;
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .galleryImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-medium);
+  }
+  
+  .galleryOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(30, 58, 138, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity var(--transition-medium);
+  }
+  
+  .galleryIcon {
+    color: white;
+    font-size: 2rem;
+  }
+  

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import styles from './InquiryFormSection.module.css';
 
 interface FormData {
   firstName: string;
@@ -31,35 +32,28 @@ const InquiryFormSection: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Simple form validation
+
     if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone) {
       setFormError('Please fill in all required fields');
       return;
     }
-    
-    // Email validation
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       setFormError('Please enter a valid email address');
       return;
     }
-    
-    // Phone validation (simple)
+
     const phoneRegex = /^\+?[0-9\s\-\(\)]{8,20}$/;
     if (!phoneRegex.test(formData.phone)) {
       setFormError('Please enter a valid phone number');
       return;
     }
-    
-    // Form submission would normally go to a server
+
     console.log('Form submitted:', formData);
-    
-    // Show success message
     setFormSubmitted(true);
     setFormError('');
-    
-    // Reset form
+
     setFormData({
       firstName: '',
       lastName: '',
@@ -69,114 +63,51 @@ const InquiryFormSection: React.FC = () => {
       destination: '',
       message: ''
     });
-    
-    // Clear success message after 5 seconds
-    setTimeout(() => {
-      setFormSubmitted(false);
-    }, 5000);
+
+    setTimeout(() => setFormSubmitted(false), 5000);
   };
 
   return (
-    <section className="cta-section" id="inquiry-form" style={ctaSectionStyle}>
+    <section className={styles.ctaSection} id="inquiry-form">
       <div className="container">
-        <div className="cta-content" style={ctaContentStyle} data-aos="fade-up">
+        <div className={styles.ctaContent} data-aos="fade-up">
           <h2>Start Your Journey Today</h2>
           <p>Fill out the form below to get personalized guidance from our expert counselors.</p>
         </div>
-        <form className="cta-form" style={ctaFormStyle} onSubmit={handleSubmit} data-aos="fade-up">
-          <h3 className="form-title" style={formTitleStyle}>
-lorem Ipsum Emet.
-          </h3>
-          
-          {formSubmitted && (
-            <div className="form-success" style={formSuccessStyle}>
-              Thank you for your inquiry! Our counselors will contact you shortly.
-            </div>
-          )}
-          
-          {formError && (
-            <div className="form-error" style={formErrorStyle}>
-              {formError}
-            </div>
-          )}
-          
-          <div className="form-grid" style={formGridStyle}>
-            <div className="form-group" style={formGroupStyle}>
-              <label htmlFor="firstName" className="form-label" style={formLabelStyle}>First Name</label>
-              <input 
-                type="text" 
-                id="firstName" 
-                className="form-control" 
-                style={formControlStyle} 
-                placeholder="Your first name" 
-                value={formData.firstName}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            
-            <div className="form-group" style={formGroupStyle}>
-              <label htmlFor="lastName" className="form-label" style={formLabelStyle}>Last Name</label>
-              <input 
-                type="text" 
-                id="lastName" 
-                className="form-control" 
-                style={formControlStyle} 
-                placeholder="Your last name" 
-                value={formData.lastName}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            
-            <div className="form-group" style={formGroupStyle}>
-              <label htmlFor="email" className="form-label" style={formLabelStyle}>Email Address</label>
-              <input 
-                type="email" 
-                id="email" 
-                className="form-control" 
-                style={formControlStyle} 
-                placeholder="Your email address" 
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            
-            <div className="form-group" style={formGroupStyle}>
-              <label htmlFor="phone" className="form-label" style={formLabelStyle}>Mobile Number</label>
-              <input 
-                type="tel" 
-                id="phone" 
-                className="form-control" 
-                style={formControlStyle} 
-                placeholder="Your phone number" 
-                value={formData.phone}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            
-            <div className="form-group" style={formGroupStyle}>
-              <label htmlFor="city" className="form-label" style={formLabelStyle}>City</label>
-              <input 
-                type="text" 
-                id="city" 
-                className="form-control" 
-                style={formControlStyle} 
-                placeholder="Your city" 
-                value={formData.city}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            
-            <div className="form-group" style={formGroupStyle}>
-              <label htmlFor="destination" className="form-label" style={formLabelStyle}>Preferred Destination</label>
-              <select 
-                id="destination" 
-                className="form-control" 
-                style={formControlStyle} 
+
+        <form className={styles.ctaForm} onSubmit={handleSubmit} data-aos="fade-up">
+          <h3 className={styles.formTitle}>Lorem Ipsum Emet.</h3>
+
+          {formSubmitted && <div className={styles.formSuccess}>Thank you for your inquiry! Our counselors will contact you shortly.</div>}
+          {formError && <div className={styles.formError}>{formError}</div>}
+
+          <div className={styles.formGrid}>
+            {[
+              { id: 'firstName', label: 'First Name', type: 'text', placeholder: 'Your first name' },
+              { id: 'lastName', label: 'Last Name', type: 'text', placeholder: 'Your last name' },
+              { id: 'email', label: 'Email Address', type: 'email', placeholder: 'Your email address' },
+              { id: 'phone', label: 'Mobile Number', type: 'tel', placeholder: 'Your phone number' },
+              { id: 'city', label: 'City', type: 'text', placeholder: 'Your city' },
+            ].map(({ id, label, type, placeholder }) => (
+              <div className={styles.formGroup} key={id}>
+                <label htmlFor={id} className={styles.formLabel}>{label}</label>
+                <input
+                  id={id}
+                  type={type}
+                  className={styles.formControl}
+                  placeholder={placeholder}
+                  value={(formData as any)[id]}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            ))}
+
+            <div className={styles.formGroup}>
+              <label htmlFor="destination" className={styles.formLabel}>Preferred Destination</label>
+              <select
+                id="destination"
+                className={styles.formControl}
                 value={formData.destination}
                 onChange={handleChange}
                 required
@@ -191,122 +122,27 @@ lorem Ipsum Emet.
                 <option value="other">Other</option>
               </select>
             </div>
-            
-            <div className="form-group full-width" style={{ ...formGroupStyle, gridColumn: '1 / -1' }}>
-              <label htmlFor="message" className="form-label" style={formLabelStyle}>Message</label>
-              <textarea 
-                id="message" 
-                className="form-control" 
-                style={formControlStyle} 
-                rows={4} 
-                placeholder="Write your comment here..." 
+
+            <div className={`${styles.formGroup} ${styles.fullWidth}`}>
+              <label htmlFor="message" className={styles.formLabel}>Message</label>
+              <textarea
+                id="message"
+                className={styles.formControl}
+                rows={4}
+                placeholder="Write your comment here..."
                 value={formData.message}
                 onChange={handleChange}
-              ></textarea>
+              />
             </div>
           </div>
-          
-          <button type="submit" className="btn-submit" style={btnSubmitStyle}>
+
+          <button type="submit" className={styles.btnSubmit}>
             Submit Now
           </button>
         </form>
       </div>
     </section>
   );
-};
-
-// Styles
-const ctaSectionStyle: React.CSSProperties = {
-  padding: 'var(--spacing-xl) 0',
-  background: 'linear-gradient(135deg, var(--primary), var(--accent))',
-  color: 'white',
-  textAlign: 'center',
-};
-
-const ctaContentStyle: React.CSSProperties = {
-  maxWidth: '700px',
-  margin: '0 auto',
-};
-
-const ctaFormStyle: React.CSSProperties = {
-  maxWidth: '600px',
-  margin: '0 auto',
-  backgroundColor: 'white',
-  padding: 'var(--spacing-lg)',
-  borderRadius: 'var(--border-radius-lg)',
-  boxShadow: 'var(--shadow-lg)',
-};
-
-const formTitleStyle: React.CSSProperties = {
-  color: 'var(--primary)',
-  marginBottom: 'var(--spacing-md)',
-  textAlign: 'center',
-};
-
-const formSuccessStyle: React.CSSProperties = {
-  backgroundColor: 'var(--success)',
-  color: 'white',
-  padding: 'var(--spacing-sm)',
-  borderRadius: 'var(--border-radius-md)',
-  marginBottom: 'var(--spacing-md)',
-  textAlign: 'center',
-};
-
-const formErrorStyle: React.CSSProperties = {
-  backgroundColor: 'var(--error)',
-  color: 'white',
-  padding: 'var(--spacing-sm)',
-  borderRadius: 'var(--border-radius-md)',
-  marginBottom: 'var(--spacing-md)',
-  textAlign: 'center',
-};
-
-const formGridStyle: React.CSSProperties = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(2, 1fr)',
-  gap: 'var(--spacing-md)',
-  marginBottom: 'var(--spacing-md)',
-  '@media (max-width: 768px)': {
-    gridTemplateColumns: '1fr',
-  },
-};
-
-const formGroupStyle: React.CSSProperties = {
-  marginBottom: 'var(--spacing-md)',
-};
-
-const formLabelStyle: React.CSSProperties = {
-  display: 'block',
-  marginBottom: 'var(--spacing-xs)',
-  color: 'var(--text-dark)',
-  fontWeight: 500,
-};
-
-const formControlStyle: React.CSSProperties = {
-  width: '100%',
-  padding: 'var(--spacing-sm)',
-  border: '1px solid #e5e7eb',
-  borderRadius: 'var(--border-radius-md)',
-  transition: 'border-color var(--transition-fast)',
-  '&:focus': {
-    outline: 'none',
-    borderColor: 'var(--accent)',
-  },
-};
-
-const btnSubmitStyle: React.CSSProperties = {
-  backgroundColor: 'var(--primary)',
-  color: 'white',
-  padding: 'var(--spacing-sm) var(--spacing-md)',
-  border: 'none',
-  borderRadius: 'var(--border-radius-md)',
-  fontWeight: 500,
-  cursor: 'pointer',
-  transition: 'background-color var(--transition-fast)',
-  width: '100%',
-  '&:hover': {
-    backgroundColor: 'var(--primary-light)',
-  }
 };
 
 export default InquiryFormSection;
